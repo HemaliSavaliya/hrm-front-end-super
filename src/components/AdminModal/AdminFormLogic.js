@@ -98,7 +98,7 @@ const AdminModalLogic = (adminData, editAdminId) => {
 
     const fetchCompany = async () => {
         try {
-            const response = await axios.get("https://hrm.backhrm.online/api/company-list", {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/company-list`, {
                 headers: {
                     Authorization: `Bearer ${authToken?.token}`,
                 },

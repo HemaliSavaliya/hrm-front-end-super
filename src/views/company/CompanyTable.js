@@ -64,7 +64,7 @@ const CompanyTable = ({ deleteCompany, handleEdit, companyData, logoUrls }) => {
                       sx={{ cursor: 'pointer' }}
                     >
                       <TableCell align="left">{index + 1 + page * rowsPerPage}</TableCell>
-                      <TableCell align="left">{row.id}</TableCell>
+                      {/* <TableCell align="left">{row.id}</TableCell> */}
                       <TableCell align="left">{row.companyName}</TableCell>
                       <TableCell align="left">{row.companyEmail}</TableCell>
                       <TableCell align="left">{row.companyPan || "-"}</TableCell>

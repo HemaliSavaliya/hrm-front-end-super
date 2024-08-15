@@ -1,78 +1,100 @@
-import React, { useEffect, useRef } from 'react';
-import { Button, CardActions, DialogContentText, Divider, FormControl, FormControlLabel, Grid, Radio, RadioGroup, TextField, Typography } from "@mui/material";
-import { DropFiles } from 'src/@core/DropFile/DropFiles';
-import CompanyFormLogic from './CompanyFormLogic';
+import React, { useEffect, useRef } from 'react'
+import {
+  Button,
+  CardActions,
+  DialogContentText,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography
+} from '@mui/material'
+import { DropFiles } from 'src/@core/DropFile/DropFiles'
+import CompanyFormLogic from './CompanyFormLogic'
 
 const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addCompany, editCompany }) => {
-  const { formData, handleInputChange, errors, validateForm, setFormData, initialFormValue, selectedPlan, handlePlanChange, handleImageChange } = CompanyFormLogic(companyData, editCompanyId);
+  const {
+    formData,
+    handleInputChange,
+    errors,
+    validateForm,
+    setFormData,
+    initialFormValue,
+    selectedPlan,
+    handlePlanChange,
+    handleImageChange
+  } = CompanyFormLogic(companyData, editCompanyId)
 
-  const descriptionElementRef = useRef(null);
+  const descriptionElementRef = useRef(null)
 
-  const isInEditMode = !!editCompanyId;
+  const isInEditMode = !!editCompanyId
 
   useEffect(() => {
-    const { current: descriptionElement } = descriptionElementRef;
+    const { current: descriptionElement } = descriptionElementRef
     if (descriptionElement !== null) {
-      descriptionElement.focus();
+      descriptionElement.focus()
     }
-  }, []);
+  }, [])
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
+  const handleFormSubmit = e => {
+    e.preventDefault()
 
     if (!validateForm()) {
-      return; // If the form is not valid, don't submit
+      return // If the form is not valid, don't submit
     }
 
     // Include the radio button value in the formData before submission
-    formData.subscription = selectedPlan;
+    formData.subscription = selectedPlan
 
     if (editCompanyId) {
-      editCompany(formData, editCompanyId);
+      editCompany(formData, editCompanyId)
     } else {
-      addCompany(formData);
+      addCompany(formData)
     }
 
-    setFormData(initialFormValue);
-    setOpen(false);
+    setFormData(initialFormValue)
+    setOpen(false)
   }
 
   return (
-    <DialogContentText
-      id="scroll-dialog-description"
-      ref={descriptionElementRef}
-      tabIndex={-1}
-    >
-      <form onSubmit={handleFormSubmit} autoComplete="off">
+    <DialogContentText id='scroll-dialog-description' ref={descriptionElementRef} tabIndex={-1}>
+      <form onSubmit={handleFormSubmit} autoComplete='off'>
         <Grid container spacing={5}>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               label='Company Name'
-              id="companyName"
-              name="companyName"
+              id='companyName'
+              name='companyName'
               value={formData.companyName}
               onChange={handleInputChange}
             />
-            {errors.companyName && <Typography sx={{ color: "#FF4433", fontSize: "13px", fontWeight: "lighter", pt: 1 }}>{errors.companyName}</Typography>}
+            {errors.companyName && (
+              <Typography sx={{ color: '#FF4433', fontSize: '13px', pt: 1 }}>{errors.companyName}</Typography>
+            )}
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               label='Company Email'
-              id="companyEmail"
-              name="companyEmail"
+              id='companyEmail'
+              name='companyEmail'
               value={formData.companyEmail}
               onChange={handleInputChange}
             />
-            {errors.companyEmail && <Typography sx={{ color: "#FF4433", fontSize: "13px", fontWeight: "lighter", pt: 1 }}>{errors.companyEmail}</Typography>}
+            {errors.companyEmail && (
+              <Typography sx={{ color: '#FF4433', fontSize: '13px', pt: 1 }}>{errors.companyEmail}</Typography>
+            )}
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               label='Company Pancard Number'
-              id="companyPan"
-              name="companyPan"
+              id='companyPan'
+              name='companyPan'
               value={formData.companyPan}
               onChange={handleInputChange}
             />
@@ -81,8 +103,8 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
             <TextField
               fullWidth
               label='Company GST Number'
-              id="companyGST"
-              name="companyGST"
+              id='companyGST'
+              name='companyGST'
               value={formData.companyGST}
               onChange={handleInputChange}
             />
@@ -95,7 +117,7 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
                 name='subscription'
                 value={selectedPlan}
                 onChange={handlePlanChange}
-                id="subscription"
+                id='subscription'
               >
                 <FormControlLabel value='Monthly' control={<Radio />} label='Monthly' />
                 <FormControlLabel value='Yearly' control={<Radio />} label='Yearly' />
@@ -104,39 +126,39 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
             </FormControl>
             {/* {errors.subscription && <Typography sx={{ color: "#FF4433", fontSize: "13px", fontWeight: "lighter", pt: 1 }}>{errors.subscription}</Typography>} */}
           </Grid>
-          {selectedPlan === "Custom" && (
+          {selectedPlan === 'Custom' && (
             <>
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  type="date"
+                  type='date'
                   label='Start Date'
-                  id="startDate"
-                  name="startDate"
+                  id='startDate'
+                  name='startDate'
                   value={formData.startDate}
                   onChange={handleInputChange}
                   InputLabelProps={{
-                    shrink: true,
+                    shrink: true
                   }}
                   inputProps={{
-                    placeholder: '', // Set an empty string as the placeholder
+                    placeholder: '' // Set an empty string as the placeholder
                   }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  type="date"
+                  type='date'
                   label='End Date'
-                  id="endDate"
-                  name="endDate"
+                  id='endDate'
+                  name='endDate'
                   value={formData.endDate}
                   onChange={handleInputChange}
                   InputLabelProps={{
-                    shrink: true,
+                    shrink: true
                   }}
                   inputProps={{
-                    placeholder: '', // Set an empty string as the placeholder
+                    placeholder: '' // Set an empty string as the placeholder
                   }}
                 />
               </Grid>
@@ -144,16 +166,16 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
           )}
           <Grid item xs={12} sm={12}>
             <div
-              id="companyLogo"
-              name="companyLogo"
+              id='companyLogo'
+              name='companyLogo'
               style={{
-                marginBottom: "20px",
-                padding: "20px",
-                border: "dashed",
-                borderColor: "currentColor",
-                borderWidth: "thin",
-                borderRadius: "6px",
-                textAlign: "center"
+                marginBottom: '20px',
+                padding: '20px',
+                border: 'dashed',
+                borderColor: 'currentColor',
+                borderWidth: 'thin',
+                borderRadius: '6px',
+                textAlign: 'center'
               }}
             >
               <DropFiles handleImageChange={handleImageChange} />
@@ -162,11 +184,22 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
           </Grid>
         </Grid>
         <Divider sx={{ margin: 0 }} />
-        <CardActions sx={{ justifyContent: "flex-end" }}>
-          <Button size='large' type='submit' sx={{ mr: 2, lineHeight: 0, padding: "20px 25px !important" }} variant='contained'>
-            {!isInEditMode ? "Save" : "Update"}
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
+          <Button
+            size='large'
+            type='submit'
+            sx={{ mr: 2, lineHeight: 0, padding: '20px 25px !important' }}
+            variant='contained'
+          >
+            {!isInEditMode ? 'Save' : 'Update'}
           </Button>
-          <Button size='large' color='secondary' variant='outlined' onClick={handleClose} sx={{ lineHeight: 0, padding: "20px 25px !important" }}>
+          <Button
+            size='large'
+            color='secondary'
+            variant='outlined'
+            onClick={handleClose}
+            sx={{ lineHeight: 0, padding: '20px 25px !important' }}
+          >
             Cancel
           </Button>
         </CardActions>
@@ -175,4 +208,4 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
   )
 }
 
-export default CompanyForm;
+export default CompanyForm

@@ -64,7 +64,7 @@ const AdminTable = ({ deleteAdmin, handleEdit, adminData }) => {
                       sx={{ cursor: 'pointer' }}
                     >
                       <TableCell align="left">{index + 1 + page * rowsPerPage}</TableCell>
-                      <TableCell align="left">{row.id}</TableCell>
+                      {/* <TableCell align="left">{row.id}</TableCell> */}
                       <TableCell align="left">{row.name}</TableCell>
                       <TableCell align="left">{row.email}</TableCell>
                       <TableCell align="left">{row.companyId}</TableCell>

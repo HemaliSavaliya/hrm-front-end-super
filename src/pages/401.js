@@ -29,7 +29,7 @@ const Error401 = () => {
           <Typography pt={3} fontSize={18}>You don&prime;t have permission to access this page. Go Home!</Typography>
         </BoxWrapper>
         <Img height='430' alt='error-illustration' src='/images/pages/permission.png' />
-        <Link passHref href='/pages/login'>
+        <Link passHref href='/login'>
           <Button component='a' variant='contained' sx={{ px: 5.5 }}>
             Back to Home
           </Button>
