@@ -1,17 +1,18 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { motion } from "framer-motion";
-import { Chip, ListItem, Typography, Box, ListItemIcon, ListItemButton } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import themeConfig from 'src/configs/themeConfig';
-import UserIcon from 'src/layouts/components/UserIcon';
-import { handleURLQueries } from 'src/@core/layouts/utils';
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { motion } from 'framer-motion'
+import { Chip, ListItem, Typography, Box, ListItemIcon, ListItemButton } from '@mui/material'
+import { styled } from '@mui/material/styles'
+import themeConfig from 'src/configs/themeConfig'
+import UserIcon from 'src/layouts/components/UserIcon'
+import { handleURLQueries } from 'src/@core/layouts/utils'
 
 // ** Styled Components
 const MenuNavLink = styled(ListItemButton)(({ theme }) => ({
   width: '100%',
   borderTopRightRadius: 100,
   borderBottomRightRadius: 100,
+  marginBottom: 5,
   color: theme.palette.text.primary,
   padding: theme.spacing(2.25, 3.5),
   transition: 'opacity .25s ease-in-out, background .25s ease-in-out, color .25s ease-in-out',
@@ -49,15 +50,10 @@ const VerticalNavLink = ({ item, navVisible, toggleNavVisibility }) => {
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
-  };
+  }
 
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={itemVariants}
-      transition={{ delay: 0.2, duration: 0.5 }}
-    >
+    <motion.div initial='hidden' animate='visible' variants={itemVariants} transition={{ delay: 0.2, duration: 0.5 }}>
       <ListItem
         disablePadding
         className='nav-link'
@@ -114,4 +110,4 @@ const VerticalNavLink = ({ item, navVisible, toggleNavVisibility }) => {
   )
 }
 
-export default VerticalNavLink;
+export default VerticalNavLink

@@ -1,16 +1,14 @@
-import { Box, TextField, IconButton, useMediaQuery, InputAdornment } from '@mui/material';
-import Menu from 'mdi-material-ui/Menu';
-import Magnify from 'mdi-material-ui/Magnify';
-import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler';
-import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown';
-import NotificationDropdown from 'src/@core/layouts/components/shared-components/NotificationDropdown';
+import { Box, IconButton, useMediaQuery } from '@mui/material'
+import Menu from 'mdi-material-ui/Menu'
+import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
+import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
 
 const AppBarContent = props => {
   // ** Props
-  const { hidden, settings, saveSettings, toggleNavVisibility } = props;
+  const { hidden, settings, saveSettings, toggleNavVisibility } = props
 
   // ** Hook
-  const hiddenSm = useMediaQuery(theme => theme.breakpoints.down('sm'));
+  const hiddenSm = useMediaQuery(theme => theme.breakpoints.down('sm'))
 
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -34,4 +32,4 @@ const AppBarContent = props => {
   )
 }
 
-export default AppBarContent;
+export default AppBarContent
