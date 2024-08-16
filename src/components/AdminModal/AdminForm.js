@@ -160,7 +160,7 @@ const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, edi
           </Grid>
         </Grid>
         <Divider sx={{ margin: 0 }} />
-        <CardActions sx={{ justifyContent: 'flex-end' }}>
+        <CardActions sx={{ justifyContent: 'flex-end', pb: 0, pr: 0 }}>
           <Button
             size='large'
             type='submit'

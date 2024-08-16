@@ -8,7 +8,6 @@ import {
   IconButton,
   CardContent,
   FormControl,
-  OutlinedInput,
   InputAdornment,
   Input
 } from '@mui/material'
@@ -34,8 +33,15 @@ const LinkStyled = styled('a')(({ theme }) => ({
 }))
 
 const LoginPage = () => {
-  const { handleKeyDown, values, handleChange, handleClickShowPassword, handleMouseDownPassword, handleSubmit } =
-    useAuth()
+  const {
+    handleKeyDown,
+    values,
+    handleChange,
+    handleClickShowPassword,
+    handleMouseDownPassword,
+    handleSubmit,
+    isSaving
+  } = useAuth()
   const theme = useTheme()
 
   return (
@@ -103,8 +109,15 @@ const LoginPage = () => {
               />
             </FormControl>
 
-            <Button fullWidth size='large' variant='contained' sx={{ marginTop: 7 }} onClick={handleSubmit}>
-              Login
+            <Button
+              fullWidth
+              size='large'
+              variant='contained'
+              sx={{ marginTop: 7 }}
+              onClick={handleSubmit}
+              disabled={isSaving}
+            >
+              {isSaving ? 'Login...' : 'Login'}
             </Button>
             <Divider sx={{ my: 5 }} />
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>

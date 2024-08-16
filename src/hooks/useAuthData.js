@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import { useTheme } from '@mui/material/styles'
 
 const useAuth = () => {
+  const [isSaving, setIsSaving] = useState(false)
   const [values, setValues] = useState({
     email: '',
     password: '',
@@ -33,6 +34,9 @@ const useAuth = () => {
 
   const handleSubmit = async e => {
     e.preventDefault()
+
+    // Disable the save button to prevent multiple submissions
+    setIsSaving(true)
 
     const { email, password } = values
 
@@ -97,6 +101,9 @@ const useAuth = () => {
       setTimeout(() => {
         router.push('/500')
       }, 2000)
+    } finally {
+      // Ensure to re-enable the save button even if an error occurs
+      setIsSaving(false)
     }
   }
 
@@ -107,6 +114,7 @@ const useAuth = () => {
   }
 
   return {
+    isSaving,
     values,
     handleChange,
     handleClickShowPassword,
