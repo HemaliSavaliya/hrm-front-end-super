@@ -22,7 +22,18 @@ const Company = () => {
   } = useCompanyData()
 
   if (loading) {
-    return <div>Loading...</div>
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '80vh'
+        }}
+      >
+        <img src='/images/loader.svg' alt='loader' />
+      </div>
+    )
   }
 
   return (

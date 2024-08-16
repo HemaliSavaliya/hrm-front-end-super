@@ -1,106 +1,139 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
 const CompanyFormLogic = (companyData, editCompanyId) => {
-    const initialFormValue = {
-        companyName: "",
-        companyEmail: "",
-        companyPan: "",
-        companyGST: "",
-        subscription: "",
-        startDate: "",
-        endDate: "",
-        companyLogo: []
-    };
+  const initialFormValue = {
+    companyName: '',
+    companyEmail: '',
+    companyPan: '',
+    companyGST: '',
+    subscription: '',
+    startDate: '',
+    endDate: '',
+    companyLogo: []
+  }
 
-    const [formData, setFormData] = useState(initialFormValue);
-    const [errors, setErrors] = useState(initialFormValue);
-    const [selectedPlan, setSelectedPlan] = useState("");
+  const [formData, setFormData] = useState(initialFormValue)
+  const [errors, setErrors] = useState(initialFormValue)
+  const [selectedPlan, setSelectedPlan] = useState('')
 
-    const handlePlanChange = (event) => {
-        setSelectedPlan(event.target.value);
+  const getFormattedDate = date => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-based
+    const day = String(date.getDate()).padStart(2, '0')
+    
+    return `${year}-${month}-${day}`
+  }
+
+  const handlePlanChange = event => {
+    const plan = event.target.value
+    setSelectedPlan(plan)
+
+    const today = new Date()
+    const startDate = getFormattedDate(today)
+    let endDate = ''
+
+    if (plan === 'Monthly') {
+      const nextMonth = new Date(today.setMonth(today.getMonth() + 1))
+      endDate = getFormattedDate(nextMonth)
+    } else if (plan === 'Yearly') {
+      const nextYear = new Date(today.setFullYear(today.getFullYear() + 1))
+      endDate = getFormattedDate(nextYear)
     }
 
-    const validateField = (name, value) => {
-        switch (name) {
-            case "companyName":
-                if (value.trim() === "") {
-                    return "Company Name is required";
-                } else if (!/^[A-Za-z\s]+$/.test(value)) {
-                    return "Company Name should contain only characters";
-                }
-                break;
-            case "companyEmail":
-                if (value.trim() === "") {
-                    return "Email address is required";
-                } else if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/.test(value)) {
-                    return "Invalid email address";
-                }
-                break;
+    setFormData({
+      ...formData,
+      subscription: plan,
+      startDate: plan === 'Custom' ? '' : startDate,
+      endDate: plan === 'Custom' ? '' : endDate
+    })
+  }
+
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'companyName':
+        if (value.trim() === '') {
+          return 'Company Name is required'
+        } else if (!/^[A-Za-z\s]+$/.test(value)) {
+          return 'Company Name should contain only characters'
         }
-
-        return ""; // If no error
-    };
-
-    const validateForm = () => {
-        const newErrors = {};
-        Object.keys(initialFormValue).forEach((name) => {
-            const value = formData[name];
-            const error = validateField(name, value);
-            newErrors[name] = error;
-        });
-
-        setErrors(newErrors);
-
-        return !Object.values(newErrors).some((error) => error !== "");
-    };
-
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-
-        const error = validateField(name, value);
-
-        setErrors({
-            ...errors,
-            [name]: error,
-        });
-    };
-
-    const handleImageChange = (files) => {
-        setFormData({
-            ...formData,
-            companyLogo: files // Store the selected image
-        });
-    };
-
-    useEffect(() => {
-        const selectedCompany = companyData.find((company) => company.id === editCompanyId);
-
-        if (selectedCompany) {
-            setFormData(selectedCompany);
-            setSelectedPlan(selectedCompany.subscription || "");
-        } else {
-            setFormData({
-                ...initialFormValue
-            });
+        break
+      case 'companyEmail':
+        if (value.trim() === '') {
+          return 'Email address is required'
+        } else if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/.test(value)) {
+          return 'Invalid email address'
         }
-    }, [editCompanyId, companyData]);
-
-    return {
-        handleInputChange,
-        formData,
-        errors,
-        validateForm,
-        setFormData,
-        initialFormValue,
-        selectedPlan,
-        handlePlanChange,
-        handleImageChange
+        break
+      case 'companyLogo':
+        if (value.length === 0) {
+          return 'Company Logo is required'
+        }
+        break
     }
+
+    return '' // If no error
+  }
+
+  const validateForm = () => {
+    const newErrors = {}
+    Object.keys(initialFormValue).forEach(name => {
+      const value = formData[name]
+      const error = validateField(name, value)
+      newErrors[name] = error
+    })
+
+    setErrors(newErrors)
+
+    return !Object.values(newErrors).some(error => error !== '')
+  }
+
+  const handleInputChange = event => {
+    const { name, value } = event.target
+    setFormData({
+      ...formData,
+      [name]: value
+    })
+
+    const error = validateField(name, value)
+
+    setErrors({
+      ...errors,
+      [name]: error
+    })
+  }
+
+  const handleImageChange = files => {
+    setFormData({
+      ...formData,
+      companyLogo: files // Store the selected image
+    })
+  }
+
+  useEffect(() => {
+    const selectedCompany = companyData.find(company => company.id === editCompanyId)
+
+    if (selectedCompany) {
+      setFormData(selectedCompany)
+      setSelectedPlan(selectedCompany.subscription || '')
+    } else {
+      setFormData({
+        ...initialFormValue
+      })
+    }
+  }, [editCompanyId, companyData])
+
+  return {
+    handleInputChange,
+    formData,
+    errors,
+    validateForm,
+    setFormData,
+    initialFormValue,
+    selectedPlan,
+    handlePlanChange,
+    handleImageChange
+  }
 }
 
-export default CompanyFormLogic;
+export default CompanyFormLogic

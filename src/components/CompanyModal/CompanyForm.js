@@ -124,7 +124,6 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
                 <FormControlLabel value='Custom' control={<Radio />} label='Custom' />
               </RadioGroup>
             </FormControl>
-            {/* {errors.subscription && <Typography sx={{ color: "#FF4433", fontSize: "13px", fontWeight: "lighter", pt: 1 }}>{errors.subscription}</Typography>} */}
           </Grid>
           {selectedPlan === 'Custom' && (
             <>
@@ -180,7 +179,9 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
             >
               <DropFiles handleImageChange={handleImageChange} />
             </div>
-            {/* {errors.companyLogo && <Typography sx={{ mb: 3, color: "#FF4433", fontSize: "13px", fontWeight: "lighter", pt: 1 }}>{errors.companyLogo}</Typography>} */}
+            {errors.companyLogo && (
+              <Typography sx={{ mb: 3, color: '#FF4433', fontSize: '13px' }}>{errors.companyLogo}</Typography>
+            )}
           </Grid>
         </Grid>
         <Divider sx={{ margin: 0 }} />
