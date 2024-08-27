@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   Button,
   CardActions,
@@ -16,7 +16,6 @@ import {
   TextField,
   Typography
 } from '@mui/material'
-import { useEffect, useRef } from 'react'
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import AdminModalLogic from './AdminFormLogic'
@@ -34,6 +33,7 @@ const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, edi
   } = AdminModalLogic(adminData, editAdminId)
 
   const descriptionElementRef = useRef(null)
+  const [loading, setLoading] = useState(false) // Add loading state
 
   const isInEditMode = !!editAdminId
 
@@ -49,23 +49,31 @@ const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, edi
     setFormData({ ...formData, companyId })
   }
 
-  const handleFormSubmit = e => {
+  const handleFormSubmit = async e => {
     e.preventDefault()
 
     if (!validateForm()) {
       return // If the form is not valid, don't submit
     }
 
+    setLoading(true) // Set loading to true when starting submission
+
     const adminToSubmit = { ...formData, companyId: companyData.find(c => c.companyName === formData.companyId)?.id }
 
-    if (editAdminId) {
-      editAdmin(adminToSubmit, editAdminId)
-    } else {
-      addAdmin(adminToSubmit)
+    try {
+      if (editAdminId) {
+        await editAdmin(adminToSubmit, editAdminId)
+      } else {
+        await addAdmin(adminToSubmit)
+      }
+      setFormData(initialFormValue)
+      setOpen(false)
+    } catch (error) {
+      console.error('Error submitting the form:', error)
+      // Handle error here (e.g., show an error message)
+    } finally {
+      setLoading(false) // Set loading to false once submission is done
     }
-
-    setFormData(initialFormValue)
-    setOpen(false)
   }
 
   useEffect(() => {
@@ -166,8 +174,9 @@ const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, edi
             type='submit'
             sx={{ mr: 2, lineHeight: 0, padding: '20px 25px !important' }}
             variant='contained'
+            disabled={loading} // Disable button while loading
           >
-            {!isInEditMode ? 'Save' : 'Update'}
+            {loading ? <>Saving...</> : !isInEditMode ? 'Save' : 'Update'}
           </Button>
           <Button
             size='large'
@@ -175,6 +184,7 @@ const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, edi
             variant='outlined'
             onClick={handleClose}
             sx={{ lineHeight: 0, padding: '20px 25px !important' }}
+            disabled={loading} // Disable button while loading
           >
             Cancel
           </Button>

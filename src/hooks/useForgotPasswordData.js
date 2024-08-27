@@ -60,7 +60,7 @@ const useForgotPasswordData = () => {
           }
         })
 
-        let filteredUsers = response.data
+        let filteredUsers = response.data.filter(emp => emp.deleted === 0)
 
         setUserPassword(filteredUsers)
       } catch (error) {

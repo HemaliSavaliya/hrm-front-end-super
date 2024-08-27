@@ -6,10 +6,12 @@ import toast from 'react-hot-toast'
 
 const useAdminData = () => {
   const [adminData, setAdminData] = useState([])
+  const [adminDataIn, setAdminDataIn] = useState([])
   const [editAdminId, setEditAdminId] = useState(null)
   const [open, setOpen] = useState(false)
   const [scroll, setScroll] = useState('body')
   const [loading, setLoading] = useState(true)
+  const [loadingIn, setLoadingIn] = useState(true)
   const authToken = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('login-details')) : null
   const theme = useTheme()
 
@@ -31,6 +33,8 @@ const useAdminData = () => {
 
   const fetchData = async () => {
     setLoading(true)
+    setLoadingIn(true)
+
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/adminList`, {
         headers: {
@@ -38,16 +42,23 @@ const useAdminData = () => {
         }
       })
 
-      setAdminData(response.data)
+      const activeAdmins = response.data.filter(del => del.deleted === 0)
+      const inactiveAdmins = response.data.filter(del => del.deleted === 1)
+
+      setAdminData(activeAdmins)
+      setAdminDataIn(inactiveAdmins)
     } catch (error) {
       console.error('Error fetching Admin', error)
     } finally {
       setLoading(false)
+      setLoadingIn(false)
     }
   }
 
   useEffect(() => {
-    fetchData()
+    if (authToken?.token) {
+      fetchData()
+    }
   }, [authToken?.token])
 
   // Function to add form data to localStorage
@@ -177,12 +188,6 @@ const useAdminData = () => {
         // Wait for the fetchData to complete before proceeding
         await fetchData()
       }, 1000) // 1000 milliseconds = 1 seconds
-
-      // // Check the success status from the API response
-      // if (response.data) {
-      //     // Jo deleted admin pn table ma display karvana hoy to niche ne line remove karvani che
-      //     setAdminData((prevData) => prevData.filter((admin) => admin.id !== id));
-      // }
     } catch (error) {
       console.error('Error deleting Admin', error)
       toast.error('Error Enabled Admin. Please try again.', {
@@ -199,7 +204,9 @@ const useAdminData = () => {
 
   return {
     loading,
+    loadingIn,
     adminData,
+    adminDataIn,
     editAdminId,
     addAdmin,
     editAdmin,

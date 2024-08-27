@@ -1,17 +1,18 @@
-import { Card } from '@mui/material'
+import React from 'react'
 import { Toaster } from 'react-hot-toast'
 import CompanyModal from 'src/components/CompanyModal/CompanyModal'
 import useCompanyData from 'src/hooks/useCompanyData'
-import CompanyTable from 'src/views/company/CompanyTable'
+import { Card } from '@mui/material'
+import CompanyInactiveTable from './CompanyInactiveTable'
 
-const Company = () => {
+const InactiveCompany = ({ value }) => {
   const {
-    loading,
+    loadingIn,
     deleteCompany,
     addCompany,
     editCompany,
     editCompanyId,
-    companyData,
+    companyDataIn,
     open,
     setOpen,
     scroll,
@@ -21,28 +22,14 @@ const Company = () => {
     logoUrls
   } = useCompanyData()
 
-  if (loading) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '80vh'
-        }}
-      >
-        <img src='/images/loader.svg' alt='loader' />
-      </div>
-    )
-  }
-
   return (
     <>
       <Toaster />
 
       <CompanyModal
+        value={value}
         editCompanyId={editCompanyId}
-        companyData={companyData}
+        companyData={companyDataIn}
         open={open}
         setOpen={setOpen}
         scroll={scroll}
@@ -53,10 +40,11 @@ const Company = () => {
       />
 
       <Card sx={{ mt: 3 }}>
-        <CompanyTable
+        <CompanyInactiveTable
+          loadingIn={loadingIn}
           deleteCompany={deleteCompany}
           handleEdit={handleEdit}
-          companyData={companyData}
+          companyDataIn={companyDataIn}
           logoUrls={logoUrls}
         />
       </Card>
@@ -64,4 +52,4 @@ const Company = () => {
   )
 }
 
-export default Company
+export default InactiveCompany

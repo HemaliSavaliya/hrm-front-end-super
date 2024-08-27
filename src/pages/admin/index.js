@@ -5,9 +5,9 @@ import { styled } from '@mui/material/styles'
 import MuiTab from '@mui/material/Tab'
 import 'react-datepicker/dist/react-datepicker.css'
 import { motion } from 'framer-motion'
-import ActiveCompany from 'src/views/company/ActiveCompany'
-import InactiveCompany from 'src/views/company/InactiveCompany'
-import { BankOffOutline, BankOutline } from 'mdi-material-ui'
+import ActiveAdmin from 'src/views/admin/ActiveAdmin'
+import InactiveAdmin from 'src/views/admin/InactiveAdmin'
+import { AccountLockOpenOutline, AccountLockOutline } from 'mdi-material-ui'
 
 const Tab = styled(MuiTab)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -27,7 +27,7 @@ const TabName = styled('span')(({ theme }) => ({
   }
 }))
 
-const Company = () => {
+const Admin = () => {
   // ** State
   const [value, setValue] = useState('active')
   const [loading, setLoading] = useState(true)
@@ -75,8 +75,8 @@ const Company = () => {
               value='active'
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <BankOutline />
-                  <TabName>Active Company</TabName>
+                  <AccountLockOpenOutline />
+                  <TabName>Active Admin</TabName>
                 </Box>
               }
             />
@@ -84,8 +84,8 @@ const Company = () => {
               value='inactive'
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <BankOffOutline />
-                  <TabName>Inactive Company</TabName>
+                  <AccountLockOutline />
+                  <TabName>Inactive Admin</TabName>
                 </Box>
               }
             />
@@ -94,13 +94,13 @@ const Company = () => {
       </motion.div>
 
       <TabPanel sx={{ p: 0 }} value='active'>
-        <ActiveCompany value={value} />
+        <ActiveAdmin value={value} />
       </TabPanel>
       <TabPanel sx={{ p: 0 }} value='inactive'>
-        <InactiveCompany value={value} />
+        <InactiveAdmin value={value} />
       </TabPanel>
     </TabContext>
   )
 }
 
-export default Company
+export default Admin

@@ -6,11 +6,13 @@ import toast from 'react-hot-toast'
 
 const useCompanyData = () => {
   const [companyData, setCompanyData] = useState([])
+  const [companyDataIn, setCompanyDataIn] = useState([])
   const [editCompanyId, setEditCompanyId] = useState(null)
   const [open, setOpen] = useState(false)
   const [scroll, setScroll] = useState('body')
   const [logoUrls, setLogoUrls] = useState({})
   const [loading, setLoading] = useState(true)
+  const [loadingIn, setLoadingIn] = useState(true)
   const authToken = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('login-details')) : null
   const theme = useTheme()
 
@@ -32,6 +34,8 @@ const useCompanyData = () => {
 
   const fetchData = async () => {
     setLoading(true)
+    setLoadingIn(true)
+
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/company-list`, {
         headers: {
@@ -39,16 +43,23 @@ const useCompanyData = () => {
         }
       })
 
-      setCompanyData(response.data)
+      const activeCompanies = response.data.filter(del => del.deleted === 0)
+      const inactiveCompanies = response.data.filter(del => del.deleted === 1)
+
+      setCompanyData(activeCompanies)
+      setCompanyDataIn(inactiveCompanies)
     } catch (error) {
       console.error('Error fetching Company', error)
     } finally {
       setLoading(false)
+      setLoadingIn(false)
     }
   }
 
   useEffect(() => {
-    fetchData()
+    if (authToken?.token) {
+      fetchData()
+    }
   }, [authToken?.token])
 
   // Function to add form data to localStorage
@@ -180,11 +191,6 @@ const useCompanyData = () => {
         // Wait for the fetchData to complete before proceeding
         await fetchData()
       }, 1000)
-
-      // // Check the success status from the API response
-      // if (response.data) {
-      //     setCompanyData((prevData) => prevData.filter((company) => company.id !== id));
-      // }
     } catch (error) {
       console.error('Error deleting Company', error)
       toast.error('Error Enabled/Disabled Company. Please try again.', {
@@ -204,8 +210,12 @@ const useCompanyData = () => {
     const fetchCompanyLogos = async () => {
       try {
         const updatedLogoUrls = {}
+
+        // Combine active and inactive companies
+        const allCompanies = [...companyData, ...companyDataIn]
+
         await Promise.all(
-          companyData.map(async company => {
+          allCompanies.map(async company => {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/company-logo/${company.id}`, {
               responseType: 'arraybuffer'
             })
@@ -224,11 +234,13 @@ const useCompanyData = () => {
     }
 
     fetchCompanyLogos()
-  }, [companyData])
+  }, [companyData, companyDataIn])
 
   return {
     loading,
+    loadingIn,
     companyData,
+    companyDataIn,
     editCompanyId,
     addCompany,
     editCompany,

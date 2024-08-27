@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Button,
   CardActions,
@@ -29,6 +29,7 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
   } = CompanyFormLogic(companyData, editCompanyId)
 
   const descriptionElementRef = useRef(null)
+  const [loading, setLoading] = useState(false) // Add loading state
 
   const isInEditMode = !!editCompanyId
 
@@ -39,24 +40,32 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
     }
   }, [])
 
-  const handleFormSubmit = e => {
+  const handleFormSubmit = async e => {
     e.preventDefault()
 
     if (!validateForm()) {
       return // If the form is not valid, don't submit
     }
 
+    setLoading(true) // Set loading to true when starting submission
+
     // Include the radio button value in the formData before submission
     formData.subscription = selectedPlan
 
-    if (editCompanyId) {
-      editCompany(formData, editCompanyId)
-    } else {
-      addCompany(formData)
+    try {
+      if (editCompanyId) {
+        await editCompany(formData, editCompanyId)
+      } else {
+        await addCompany(formData)
+      }
+      setFormData(initialFormValue)
+      setOpen(false)
+    } catch (error) {
+      console.error('Error submitting the form:', error)
+      // Handle error here (e.g., show an error message)
+    } finally {
+      setLoading(false) // Set loading to false once submission is done
     }
-
-    setFormData(initialFormValue)
-    setOpen(false)
   }
 
   return (
@@ -191,8 +200,9 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
             type='submit'
             sx={{ mr: 2, lineHeight: 0, padding: '20px 25px !important' }}
             variant='contained'
+            disabled={loading} // Disable button while loading
           >
-            {!isInEditMode ? 'Save' : 'Update'}
+            {loading ? <>Saving...</> : !isInEditMode ? 'Save' : 'Update'}
           </Button>
           <Button
             size='large'
@@ -200,6 +210,7 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
             variant='outlined'
             onClick={handleClose}
             sx={{ lineHeight: 0, padding: '20px 25px !important' }}
+            disabled={loading} // Disable button while loading
           >
             Cancel
           </Button>

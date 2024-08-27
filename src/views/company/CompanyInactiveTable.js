@@ -2,7 +2,7 @@ import React from 'react'
 import { DataGrid } from '@mui/x-data-grid'
 import { EyeOffOutline, EyeOutline, PencilOutline } from 'mdi-material-ui'
 
-const CompanyTable = ({ deleteCompany, handleEdit, companyData, logoUrls, loading }) => {
+const CompanyInactiveTable = ({ deleteCompany, handleEdit, companyDataIn, logoUrls, loadingIn }) => {
   const columns = [
     { field: 'id', headerName: '#', width: 70 },
     { field: 'companyName', headerName: 'Company Name', width: 200 },
@@ -67,7 +67,7 @@ const CompanyTable = ({ deleteCompany, handleEdit, companyData, logoUrls, loadin
     }
   ]
 
-  const rows = companyData.map((row, index) => ({
+  const rows = companyDataIn.map((row, index) => ({
     id: index + 1, // Use companyId for the id field
     companyName: row.companyName,
     companyEmail: row.companyEmail,
@@ -92,7 +92,7 @@ const CompanyTable = ({ deleteCompany, handleEdit, companyData, logoUrls, loadin
           }
         }}
         pageSizeOptions={[5, 10, 25, 100]}
-        loading={loading}
+        loading={loadingIn}
         disableSelectionOnClick
         sx={{ minHeight: '400px', width: '100%' }}
       />
@@ -100,4 +100,4 @@ const CompanyTable = ({ deleteCompany, handleEdit, companyData, logoUrls, loadin
   )
 }
 
-export default CompanyTable
+export default CompanyInactiveTable

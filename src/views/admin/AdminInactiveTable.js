@@ -2,7 +2,7 @@ import React from 'react'
 import { DataGrid } from '@mui/x-data-grid'
 import { EyeOffOutline, EyeOutline, PencilOutline } from 'mdi-material-ui'
 
-const AdminTable = ({ deleteAdmin, handleEdit, adminData, loading }) => {
+const AdminInactiveTable = ({ deleteAdmin, handleEdit, adminDataIn, loadingIn }) => {
   const columns = [
     { field: 'id', headerName: '#', width: 70 },
     { field: 'name', headerName: 'Name', width: 200 },
@@ -32,7 +32,7 @@ const AdminTable = ({ deleteAdmin, handleEdit, adminData, loading }) => {
     }
   ]
 
-  const rows = adminData.map((row, index) => ({
+  const rows = adminDataIn.map((row, index) => ({
     id: index + 1, // Use adminId for the id field
     companyName: row.companyId,
     email: row.email,
@@ -54,7 +54,7 @@ const AdminTable = ({ deleteAdmin, handleEdit, adminData, loading }) => {
           }
         }}
         pageSizeOptions={[5, 10, 25, 100]}
-        loading={loading}
+        loading={loadingIn}
         disableSelectionOnClick
         sx={{ minHeight: '400px', width: '100%' }}
       />
@@ -62,4 +62,4 @@ const AdminTable = ({ deleteAdmin, handleEdit, adminData, loading }) => {
   )
 }
 
-export default AdminTable
+export default AdminInactiveTable

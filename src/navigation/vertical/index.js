@@ -7,12 +7,12 @@ const navigation = () => {
     {
       title: 'Company',
       icon: OfficeBuildingOutline,
-      path: '/company'
+      path: '/'
     },
     {
       title: 'Admin',
       icon: AccountTie,
-      path: '/'
+      path: '/admin'
     }
   ]
 }
