@@ -19,6 +19,7 @@ const Img = styled('img')(({ theme }) => ({
 
 const Error401 = () => {
   const theme = useTheme()
+  
   return (
     <Box className='content-center'>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>

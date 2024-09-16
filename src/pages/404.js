@@ -28,6 +28,7 @@ const TreeIllustration = styled('img')(({ theme }) => ({
 
 const Error404 = () => {
   const theme = useTheme()
+  
   return (
     <Box className='content-center'>
       <Box sx={{ p: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>

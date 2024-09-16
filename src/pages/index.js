@@ -121,6 +121,7 @@ const Dashboard = () => {
   // Check if notification for this admin was already sent
   const isNotificationSent = adminId => {
     const sentNotifications = JSON.parse(localStorage.getItem('sent-notifications')) || []
+
     return sentNotifications.includes(adminId)
   }
 
@@ -188,8 +189,8 @@ const Dashboard = () => {
         <Grid container spacing={6}>
           {notifications.length > 0 ? (
             notifications.map(notification => (
-              <Grid item xs={12} sm={6} md={4} lg={4} position={'relative'}>
-                <Card key={notification.id} sx={{ p: 5, boxShadow: '0px 9px 20px rgba(46, 35, 94, 0.07)' }}>
+              <Grid item xs={12} sm={6} md={4} lg={4} position={'relative'} key={notification.id}>
+                <Card sx={{ p: 5, boxShadow: '0px 9px 20px rgba(46, 35, 94, 0.07)' }}>
                   <Typography variant='subtitle2'>
                     <strong>Company Name:</strong> {notification.companyName}
                   </Typography>

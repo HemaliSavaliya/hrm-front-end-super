@@ -18,6 +18,7 @@ import CompanyFormLogic from './CompanyFormLogic'
 
 const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addCompany, editCompany }) => {
   const theme = useTheme()
+  
   const {
     formData,
     handleInputChange,

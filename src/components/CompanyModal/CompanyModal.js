@@ -15,6 +15,7 @@ const CompanyModal = ({
   editCompany
 }) => {
   const theme = useTheme()
+  
   return (
     <Box>
       {value === 'active' ? (
