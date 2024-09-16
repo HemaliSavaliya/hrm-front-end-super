@@ -113,7 +113,12 @@ const LoginPage = () => {
               fullWidth
               size='large'
               variant='contained'
-              sx={{ marginTop: 7 }}
+              sx={{
+                marginTop: 7,
+                '&.MuiButton-root:hover': {
+                  backgroundColor: theme.palette.primary.hover
+                }
+              }}
               onClick={handleSubmit}
               disabled={isSaving}
             >

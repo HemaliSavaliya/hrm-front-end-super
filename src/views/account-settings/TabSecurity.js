@@ -1,12 +1,38 @@
-import { Box, Grid, Button, Divider, InputLabel, IconButton, CardContent, FormControl, OutlinedInput, InputAdornment } from '@mui/material';
-import EyeOutline from 'mdi-material-ui/EyeOutline';
-import EyeOffOutline from 'mdi-material-ui/EyeOffOutline';
-import { motion } from "framer-motion";
-import { Toaster } from 'react-hot-toast';
-import useTabSecurityData from 'src/hooks/useTabSecurityData';
+import {
+  Box,
+  Grid,
+  Button,
+  Divider,
+  InputLabel,
+  IconButton,
+  CardContent,
+  FormControl,
+  OutlinedInput,
+  InputAdornment,
+  useTheme
+} from '@mui/material'
+import EyeOutline from 'mdi-material-ui/EyeOutline'
+import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
+import { motion } from 'framer-motion'
+import { Toaster } from 'react-hot-toast'
+import useTabSecurityData from 'src/hooks/useTabSecurityData'
 
 const TabSecurity = () => {
-  const { handleCurrentPasswordChange, handleClickShowCurrentPassword, handleMouseDownCurrentPassword, handleNewPasswordChange, handleClickShowNewPassword, handleMouseDownNewPassword, handleConfirmNewPasswordChange, handleClickShowConfirmNewPassword, handleMouseDownConfirmNewPassword, handlePasswordChange, values, setValues } = useTabSecurityData();
+  const {
+    handleCurrentPasswordChange,
+    handleClickShowCurrentPassword,
+    handleMouseDownCurrentPassword,
+    handleNewPasswordChange,
+    handleClickShowNewPassword,
+    handleMouseDownNewPassword,
+    handleConfirmNewPasswordChange,
+    handleClickShowConfirmNewPassword,
+    handleMouseDownConfirmNewPassword,
+    handlePasswordChange,
+    values,
+    setValues
+  } = useTabSecurityData()
+  const theme = useTheme()
 
   return (
     <motion.form
@@ -45,7 +71,7 @@ const TabSecurity = () => {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12} sx={{ marginTop: 6 }}>
+              <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor='account-settings-new-password'>New Password</InputLabel>
                   <OutlinedInput
@@ -103,7 +129,7 @@ const TabSecurity = () => {
             xs={12}
             sx={{ display: 'flex', marginTop: [7.5, 2.5], alignItems: 'center', justifyContent: 'center' }}
           >
-            <img width={183} alt='avatar' height={256} src='/images/pages/pose-m-1.png' />
+            <img alt='avatar' src='/images/pages/secure.svg' width={380} />
           </Grid>
         </Grid>
       </CardContent>
@@ -111,8 +137,17 @@ const TabSecurity = () => {
       <Divider sx={{ margin: 0 }} />
 
       <CardContent>
-        <Box sx={{ mt: 11 }}>
-          <Button variant='contained' sx={{ marginRight: 3.5 }} onClick={handlePasswordChange}>
+        <Box>
+          <Button
+            variant='contained'
+            sx={{
+              marginRight: 3.5,
+              '&.MuiButton-root:hover': {
+                backgroundColor: theme.palette.primary.hover
+              }
+            }}
+            onClick={handlePasswordChange}
+          >
             Save Changes
           </Button>
           <Button
@@ -129,4 +164,4 @@ const TabSecurity = () => {
   )
 }
 
-export default TabSecurity;
+export default TabSecurity

@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles'
 import LogoutVariant from 'mdi-material-ui/LogoutVariant'
 import axios from 'axios'
 import Link from 'next/link'
-import { AccountOutline } from 'mdi-material-ui'
+import { AccountOutline, ChevronDown } from 'mdi-material-ui'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -15,6 +15,18 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
   borderRadius: '50%',
   backgroundColor: theme.palette.success.main,
   boxShadow: `0 0 0 2px ${theme.palette.background.paper}`
+}))
+
+const AvatarStyled = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 40,
+  height: 40,
+  borderRadius: '100px',
+  backgroundColor: theme.palette.primary.main,
+  color: '#fff',
+  fontSize: '10px'
 }))
 
 const styles = {
@@ -66,18 +78,39 @@ const UserDropdown = () => {
     <Fragment>
       <Badge
         overlap='circular'
-        onClick={handleDropdownOpen}
+        // onClick={handleDropdownOpen}
         sx={{ ml: 2, cursor: 'pointer' }}
         badgeContent={<BadgeContentSpan />}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <Avatar
+        <AvatarStyled>
+          <Typography variant='h6' color='inherit'>
+            {authToken?.name.charAt(0).toUpperCase()}
+          </Typography>
+        </AvatarStyled>
+        {/* <Avatar
           alt='John Doe'
-          onClick={handleDropdownOpen}
+          // onClick={handleDropdownOpen}
           sx={{ width: 40, height: 40 }}
           src='/images/avatars/1.png'
-        />
+        /> */}
       </Badge>
+      <Box ml={4} sx={{ cursor: 'pointer' }} onClick={handleDropdownOpen}>
+        <Typography sx={{ fontWeight: 600, textTransform: 'capitalize' }}>{authToken?.name}</Typography>
+        <Box display={'flex'} justifyContent={'center'} alignItems={'center'}>
+          <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
+            {authToken?.role}
+          </Typography>
+          <ChevronDown
+            fontSize='10px'
+            sx={{
+              '&.MuiSvgIcon-root': {
+                fill: 'rgba(58, 53, 65, 0.38) !important'
+              }
+            }}
+          />
+        </Box>
+      </Box>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -86,7 +119,7 @@ const UserDropdown = () => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <Box sx={{ pt: 2, pb: 3, px: 4 }}>
+        {/* <Box sx={{ pt: 2, pb: 3, px: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Badge
               overlap='circular'
@@ -102,8 +135,8 @@ const UserDropdown = () => {
               </Typography>
             </Box>
           </Box>
-        </Box>
-        <Divider sx={{ mt: 0, mb: 1 }} />
+        </Box> */}
+        {/* <Divider sx={{ mt: 0, mb: 1 }} /> */}
         <Link href={'/account-settings'} style={{ textDecoration: 'none' }}>
           <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
             <Box sx={styles}>

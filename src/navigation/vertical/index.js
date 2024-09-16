@@ -1,13 +1,17 @@
 // ** Icon imports
-import AccountTie from 'mdi-material-ui/AccountTie'
-import OfficeBuildingOutline from 'mdi-material-ui/OfficeBuildingOutline'
+import { AccountTie, HomeAccount, OfficeBuildingOutline } from 'mdi-material-ui'
 
 const navigation = () => {
   return [
     {
+      title: 'Dashboard',
+      icon: HomeAccount,
+      path: '/'
+    },
+    {
       title: 'Company',
       icon: OfficeBuildingOutline,
-      path: '/'
+      path: '/company'
     },
     {
       title: 'Admin',

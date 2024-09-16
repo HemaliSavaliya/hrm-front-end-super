@@ -1,6 +1,6 @@
 // ** MUI Imports
 import CssBaseline from '@mui/material/CssBaseline'
-import GlobalStyles from '@mui/material/GlobalStyles'
+// import GlobalStyles from '@mui/material/GlobalStyles'
 import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles'
 
 // ** Theme Config
@@ -14,7 +14,7 @@ import typography from './typography'
 import themeOptions from './ThemeOptions'
 
 // ** Global Styles
-import GlobalStyling from './globalStyles'
+// import GlobalStyling from './globalStyles'
 
 const ThemeComponent = props => {
   // ** Props
@@ -40,7 +40,7 @@ const ThemeComponent = props => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <GlobalStyles styles={() => GlobalStyling(theme)} />
+      {/* <GlobalStyles styles={() => GlobalStyling(theme)} /> */}
       {children}
     </ThemeProvider>
   )

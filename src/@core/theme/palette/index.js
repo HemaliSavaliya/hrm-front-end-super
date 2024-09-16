@@ -6,7 +6,7 @@ const DefaultPalette = (mode, themeColor) => {
 
   const primaryGradient = () => {
     if (themeColor === 'primary') {
-      return '#C6A7FE'
+      return '#7366FF'
     } else if (themeColor === 'secondary') {
       return '#9C9FA4'
     } else if (themeColor === 'success') {
@@ -24,7 +24,9 @@ const DefaultPalette = (mode, themeColor) => {
     customColors: {
       main: mainColor,
       primaryGradient: primaryGradient(),
-      tableHeaderBg: mode === 'light' ? '#F9FAFC' : '#3D3759'
+      tableHeaderBg: mode === 'light' ? '#F9FAFC' : '#3D3759',
+      borderPrimary: mode === 'light' ? '#eaebee' : '#4a4b4f',
+      listHover: mode === 'light' ? '#f1f0ff' : 'rgba(115, 102, 255, 0.2)'
     },
     common: {
       black: '#000',
@@ -33,7 +35,8 @@ const DefaultPalette = (mode, themeColor) => {
     mode: mode,
     primary: {
       light: '#9E69FD',
-      main: '#9155FD',
+      main: '#7366FF',
+      hover: '#8378f9',
       dark: '#804BDF',
       contrastText: '#FFF'
     },
@@ -91,7 +94,7 @@ const DefaultPalette = (mode, themeColor) => {
     divider: `rgba(${mainColor}, 0.12)`,
     background: {
       paper: mode === 'light' ? '#FFF' : '#312D4B',
-      default: mode === 'light' ? '#F4F5FA' : '#28243D',
+      default: mode === 'light' ? '#F4F5FA' : '#28243D'
     },
     action: {
       active: `rgba(${mainColor}, 0.54)`,

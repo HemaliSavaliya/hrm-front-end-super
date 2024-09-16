@@ -1,102 +1,223 @@
-import React from 'react'
-import { DataGrid } from '@mui/x-data-grid'
-import { EyeOffOutline, EyeOutline, PencilOutline } from 'mdi-material-ui'
+import {
+  Box,
+  Button,
+  Skeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TablePagination,
+  TableRow,
+  Typography,
+  useTheme
+} from '@mui/material'
+import { DeleteOffOutline, DeleteOutline, EyeOutline, PencilOutline } from 'mdi-material-ui'
+import React, { useState } from 'react'
+import { CompanyHeadCells } from 'src/TableHeader/TableHeader'
+import { EnhancedTableHead } from 'src/common/EnhancedTableHead'
 
-const CompanyTable = ({ deleteCompany, handleEdit, companyData, logoUrls, loading }) => {
-  const columns = [
-    { field: 'id', headerName: '#', width: 70 },
-    { field: 'companyName', headerName: 'Company Name', width: 200 },
-    { field: 'companyEmail', headerName: 'Email', width: 250 },
-    { field: 'companyPan', headerName: 'PAN', width: 150, renderCell: params => params.value || '-' },
-    { field: 'companyGST', headerName: 'GST', width: 150, renderCell: params => params.value || '-' },
-    { field: 'subscription', headerName: 'Subscription', width: 150 },
-    { field: 'startDate', headerName: 'Start Date', width: 150, renderCell: params => params.value || '-' },
-    { field: 'endDate', headerName: 'End Date', width: 150, renderCell: params => params.value || '-' },
-    {
-      field: 'logo',
-      headerName: 'Logo',
-      width: 100,
-      renderCell: params => (
-        <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-          {logoUrls[params.row.companyId] ? (
-            <img
-              src={logoUrls[params.row.companyId]}
-              alt={`Company Logo ${params.row.companyId}`}
-              style={{ width: 35, height: 35, objectFit: 'contain' }}
-            />
-          ) : (
-            <div
-              style={{
-                display: 'flex',
-                padding: '10px',
-                height: '50%',
-                alignItems: 'center',
-                backgroundColor: '#f0f0f0', // Change this color to whatever you prefer
-                borderRadius: '50%' // Optional: gives a circular background
-              }}
-            >
-              {params.row.companyName.charAt(0).toUpperCase()}
-            </div>
-          )}
-        </div>
-      )
-    },
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 150,
-      renderCell: params => (
-        <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-          <PencilOutline
-            onClick={() => handleEdit(params.row.companyId)}
-            sx={{ mr: 2, color: '#9155FD', cursor: 'pointer' }}
-          />
-          {params.row.deleted === 1 ? (
-            <EyeOffOutline
-              onClick={() => deleteCompany(params.row.companyId)}
-              sx={{ color: '#9155FD', cursor: 'pointer' }}
-            />
-          ) : (
-            <EyeOutline
-              onClick={() => deleteCompany(params.row.companyId)}
-              sx={{ color: '#9155FD', cursor: 'pointer' }}
-            />
-          )}
-        </div>
-      )
-    }
-  ]
+const CompanyTable = ({
+  deleteCompany,
+  handleEdit,
+  companyData,
+  logoUrls,
+  loading,
+  totalItems,
+  page,
+  rowsPerPage,
+  setPage,
+  setRowsPerPage,
+  setSortBy,
+  setSortOrder
+}) => {
+  // for table
+  const [order, setOrder] = useState('asc')
+  const [orderBy, setOrderBy] = useState('name')
+  const theme = useTheme()
 
-  const rows = companyData.map((row, index) => ({
-    id: index + 1, // Use companyId for the id field
-    companyName: row.companyName,
-    companyEmail: row.companyEmail,
-    companyPan: row.companyPan,
-    companyGST: row.companyGST,
-    subscription: row.subscription,
-    startDate: row.startDate,
-    endDate: row.endDate,
-    deleted: row.deleted,
-    companyId: row.id // Ensure companyId is available in the row data
-  }))
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc'
+    const newOrder = isAsc ? 'desc' : 'asc'
+    setOrder(newOrder)
+    setOrderBy(property)
+    setSortBy(property) // Set the sortBy state for the backend
+    setSortOrder(newOrder) // Set the sortOrder state for the backend
+  }
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={5}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 }
-          }
-        }}
-        pageSizeOptions={[5, 10, 25, 100]}
-        loading={loading}
-        disableSelectionOnClick
-        sx={{ minHeight: '400px', width: '100%' }}
-      />
-    </div>
+    <Box sx={{ width: '100%' }}>
+      {loading ? (
+        <TableContainer sx={{ height: '280px', border: `1px solid ${theme.palette.action.focus}` }}>
+          <Table stickyHeader sx={{ minWidth: { xs: 1000, sm: 1000, lg: 1000 } }} aria-labelledby='tableTitle'>
+            <EnhancedTableHead
+              headCells={CompanyHeadCells}
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+            />
+            <TableBody>
+              {Array.from(new Array(rowsPerPage)).map((_, index) => (
+                <TableRow key={index}>
+                  {CompanyHeadCells.map(cell => (
+                    <TableCell key={cell.id}>
+                      <Skeleton variant='text' height={25} />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : companyData && companyData.length === 0 ? (
+        <Typography
+          textTransform={'uppercase'}
+          letterSpacing={1}
+          fontSize={15}
+          my={6}
+          textAlign={'center'}
+          fontWeight={600}
+        >
+          No Data Available Yet!
+        </Typography>
+      ) : (
+        <>
+          <TableContainer sx={{ height: '280px', border: `1px solid ${theme.palette.action.focus}` }}>
+            <Table
+              stickyHeader
+              sx={{ minWidth: { xs: 1000, sm: 1000, lg: 1000 } }}
+              size='small'
+              aria-label='a dense table'
+            >
+              <EnhancedTableHead
+                headCells={CompanyHeadCells}
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}
+              />
+              <TableBody>
+                {companyData.map((row, index) => {
+                  return (
+                    <TableRow tabIndex={-1} key={row.id} sx={{ cursor: 'pointer' }}>
+                      <TableCell align='left'>{index + 1 + page * rowsPerPage}</TableCell>
+                      <TableCell align='left'>{row.companyName}</TableCell>
+                      {/* <TableCell align='left'>{row.companyEmail}</TableCell> */}
+                      {/* <TableCell align='left'>{row.companyPan || '-'}</TableCell>
+                      <TableCell align='left'>{row.companyGST || '-'}</TableCell> */}
+                      <TableCell align='left'>{row.subscription}</TableCell>
+                      <TableCell align='left'>{row.startDate || '-'}</TableCell>
+                      <TableCell align='left'>{row.endDate || '-'}</TableCell>
+                      <TableCell align='left'>
+                        <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+                          {logoUrls[row.id] ? (
+                            <img
+                              src={logoUrls[row.id]}
+                              alt={`Company Logo ${row.id}`}
+                              style={{ width: 35, height: 35, objectFit: 'contain' }}
+                            />
+                          ) : (
+                            <div
+                              style={{
+                                display: 'flex',
+                                backgroundColor: 'rgb(240, 240, 240)',
+                                borderRadius: '64%',
+                                width: '20px',
+                                textAlign: 'center',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                color: '#000'
+                              }}
+                            >
+                              {row.companyName.charAt(0).toUpperCase()}
+                            </div>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell align='left'>
+                        {/* <Button
+                          sx={{
+                            background: theme.palette.background.paper,
+                            boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
+                            height: '32px',
+                            margin: '0 3px',
+                            minWidth: '32px',
+                            width: '32px'
+                          }}
+                        >
+                          <EyeOutline
+                            // onClick={() => deleteCompany(row.id)}
+                            sx={{ fontSize: '20px', color: '#1c7ad1' }}
+                          />
+                        </Button> */}
+                        <Button
+                          onClick={() => handleEdit(row.id)}
+                          sx={{
+                            background: theme.palette.background.paper,
+                            boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
+                            height: '32px',
+                            margin: '0 3px',
+                            minWidth: '32px',
+                            width: '32px'
+                          }}
+                        >
+                          <PencilOutline sx={{ fontSize: '20px', color: '#7366FF' }} />
+                        </Button>
+                        {row.deleted === 1 ? (
+                          <Button
+                            onClick={() => deleteCompany(row.id)}
+                            sx={{
+                              background: theme.palette.background.paper,
+                              boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
+                              height: '32px',
+                              margin: '0 3px',
+                              minWidth: '32px',
+                              width: '32px'
+                            }}
+                          >
+                            <DeleteOffOutline sx={{ fontSize: '20px', color: 'rgb(211, 47, 47)' }} />
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={() => deleteCompany(row.id)}
+                            sx={{
+                              background: theme.palette.background.paper,
+                              boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
+                              height: '32px',
+                              margin: '0 3px',
+                              minWidth: '32px',
+                              width: '32px'
+                            }}
+                          >
+                            <DeleteOutline sx={{ fontSize: '20px', color: 'rgb(211, 47, 47)' }} />
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component='div'
+            count={totalItems}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </>
+      )}
+    </Box>
   )
 }
 

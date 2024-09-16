@@ -1,7 +1,7 @@
 // ** MUI Imports
-import { styled, useTheme } from '@mui/material/styles';
-import MuiSwipeableDrawer from '@mui/material/SwipeableDrawer';
-import { motion } from "framer-motion";
+import { styled, useTheme } from '@mui/material/styles'
+import MuiSwipeableDrawer from '@mui/material/SwipeableDrawer'
+import { motion } from 'framer-motion'
 
 const SwipeableDrawer = styled(MuiSwipeableDrawer)({
   overflowX: 'hidden',
@@ -47,16 +47,11 @@ const Drawer = props => {
 
   const variants = {
     hidden: { opacity: 0, x: -200, y: 0 },
-    enter: { opacity: 1, x: 0, y: 0 },
+    enter: { opacity: 1, x: 0, y: 0 }
   }
 
   return (
-    <motion.main
-      variants={variants}
-      initial="hidden"
-      animate="enter"
-      transition={{ type: "linear" }}
-    >
+    <motion.main variants={variants} initial='hidden' animate='enter' transition={{ type: 'linear' }}>
       <SwipeableDrawer
         className='layout-vertical-nav'
         variant={hidden ? 'temporary' : 'permanent'}
@@ -65,8 +60,9 @@ const Drawer = props => {
         sx={{
           width: navWidth,
           '& .MuiDrawer-paper': {
-            // borderRight: 0,
-            backgroundColor: theme.palette.background.default
+            borderRight: 0,
+            backgroundColor: theme.palette.background.paper,
+            boxShadow: '0 0 21px 0 rgba(89, 102, 122, 0.1)'
           }
         }}
       >
@@ -76,4 +72,4 @@ const Drawer = props => {
   )
 }
 
-export default Drawer;
+export default Drawer

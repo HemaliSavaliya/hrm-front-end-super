@@ -80,7 +80,6 @@ const useTabSecurityData = () => {
 
       setValues({ password: '', newPassword: '', confirmPassword: '' })
     } catch (error) {
-      console.error('Error Updating password', error)
       toast.error('Error Updating Password. Please try again.', {
         duration: 2000,
         position: 'top-center',

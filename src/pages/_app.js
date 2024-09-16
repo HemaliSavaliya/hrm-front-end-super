@@ -48,7 +48,6 @@ const App = props => {
         router.pathname !== '/login' &&
         router.pathname !== '/forgot-password' &&
         router.pathname !== '/reset-password' &&
-        router.pathname !== '/500' &&
         router.pathname !== '/401'
       ) {
         router.push('/login')

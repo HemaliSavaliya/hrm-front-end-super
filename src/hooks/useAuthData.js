@@ -96,11 +96,6 @@ const useAuth = () => {
           fontSize: '15px'
         }
       })
-
-      // Redirect to 500 error page
-      setTimeout(() => {
-        router.push('/500')
-      }, 2000)
     } finally {
       // Ensure to re-enable the save button even if an error occurs
       setIsSaving(false)

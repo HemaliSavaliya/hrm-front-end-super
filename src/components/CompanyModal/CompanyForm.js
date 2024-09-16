@@ -10,12 +10,14 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  Typography
+  Typography,
+  useTheme
 } from '@mui/material'
 import { DropFiles } from 'src/@core/DropFile/DropFiles'
 import CompanyFormLogic from './CompanyFormLogic'
 
 const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addCompany, editCompany }) => {
+  const theme = useTheme()
   const {
     formData,
     handleInputChange,
@@ -62,7 +64,6 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
       setOpen(false)
     } catch (error) {
       console.error('Error submitting the form:', error)
-      // Handle error here (e.g., show an error message)
     } finally {
       setLoading(false) // Set loading to false once submission is done
     }
@@ -198,7 +199,14 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
           <Button
             size='large'
             type='submit'
-            sx={{ mr: 2, lineHeight: 0, padding: '20px 25px !important' }}
+            sx={{
+              mr: 2,
+              lineHeight: 0,
+              padding: '20px 25px !important',
+              '&.MuiButton-root:hover': {
+                backgroundColor: theme.palette.primary.hover
+              }
+            }}
             variant='contained'
             disabled={loading} // Disable button while loading
           >

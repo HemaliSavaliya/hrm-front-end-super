@@ -1,21 +1,22 @@
 // ** MUI Imports
-import { styled } from '@mui/material/styles';
-import MuiAppBar from '@mui/material/AppBar';
-import MuiToolbar from '@mui/material/Toolbar';
-import { motion } from "framer-motion";
+import { styled, useTheme } from '@mui/material/styles'
+import MuiAppBar from '@mui/material/AppBar'
+import MuiToolbar from '@mui/material/Toolbar'
+import { motion } from 'framer-motion'
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
   transition: 'none',
   alignItems: 'center',
   justifyContent: 'center',
   padding: theme.spacing(0, 6),
-  backgroundColor: theme.palette.background.default,
-  position: "fixed",
+  backgroundColor: theme.palette.background.paper,
+  position: 'fixed',
   zIndex: 20,
-  width: "-webkit-fill-available",
+  width: '-webkit-fill-available',
   color: theme.palette.text.primary,
   minHeight: theme.mixins.toolbar.minHeight,
-  borderBottom: `1px solid ${theme.palette.action.focus}`,
+  boxShadow: '0 4px 40px rgba(39,32,120,.1)',
+  // borderBottom: `1px solid ${theme.palette.action.focus}`,
   [theme.breakpoints.down('sm')]: {
     paddingLeft: theme.spacing(4),
     paddingRight: theme.spacing(4)
@@ -46,17 +47,15 @@ const LayoutAppBar = props => {
         elevation={0}
         className='layout-navbar'
         position='static'
-
-      // sx={{ backgroundColor: theme.palette.background.paper }}
       >
         <Toolbar
           className='navbar-content-container'
 
-        // sx={{
-        //   ...(contentWidth === 'boxed' && {
-        //     '@media (min-width:1440px)': { maxWidth: `calc(1440px - ${theme.spacing(6)} * 2)` }
-        //   })
-        // }}
+          // sx={{
+          //   ...(contentWidth === 'boxed' && {
+          //     '@media (min-width:1440px)': { maxWidth: `calc(1440px - ${theme.spacing(6)} * 2)` }
+          //   })
+          // }}
         >
           {(userVerticalAppBarContent && userVerticalAppBarContent(props)) || null}
         </Toolbar>
@@ -65,4 +64,4 @@ const LayoutAppBar = props => {
   )
 }
 
-export default LayoutAppBar;
+export default LayoutAppBar

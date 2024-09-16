@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Box, Card, useTheme } from '@mui/material'
+import { Box } from '@mui/material'
 import { TabList, TabPanel, TabContext } from '@mui/lab'
-import { styled } from '@mui/material/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import MuiTab from '@mui/material/Tab'
 import 'react-datepicker/dist/react-datepicker.css'
 import { motion } from 'framer-motion'
-import ActiveAdmin from 'src/views/admin/ActiveAdmin'
-import InactiveAdmin from 'src/views/admin/InactiveAdmin'
-import { AccountLockOpenOutline, AccountLockOutline } from 'mdi-material-ui'
+import ActiveCompany from 'src/views/company/ActiveCompany'
+import InactiveCompany from 'src/views/company/InactiveCompany'
+import { BankOffOutline, BankOutline } from 'mdi-material-ui'
 
 const Tab = styled(MuiTab)(({ theme }) => ({
   lineHeight: 1,
@@ -31,7 +31,7 @@ const TabName = styled('span')(({ theme }) => ({
   }
 }))
 
-const Admin = () => {
+const Company = () => {
   // ** State
   const [value, setValue] = useState('active')
   const theme = useTheme()
@@ -60,8 +60,8 @@ const Admin = () => {
               value='active'
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <AccountLockOpenOutline />
-                  <TabName>Active Admin</TabName>
+                  <BankOutline />
+                  <TabName>Active Company</TabName>
                 </Box>
               }
             />
@@ -69,8 +69,8 @@ const Admin = () => {
               value='inactive'
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <AccountLockOutline />
-                  <TabName>Inactive Admin</TabName>
+                  <BankOffOutline />
+                  <TabName>Inactive Company</TabName>
                 </Box>
               }
             />
@@ -79,13 +79,13 @@ const Admin = () => {
       </motion.div>
 
       <TabPanel sx={{ p: 0 }} value='active'>
-        <ActiveAdmin value={value} />
+        <ActiveCompany value={value} />
       </TabPanel>
       <TabPanel sx={{ p: 0 }} value='inactive'>
-        <InactiveAdmin value={value} />
+        <InactiveCompany value={value} />
       </TabPanel>
     </TabContext>
   )
 }
 
-export default Admin
+export default Company

@@ -1,7 +1,7 @@
-import Link from 'next/link';
-import { Box, Typography } from '@mui/material';
-import { styled, useTheme } from '@mui/material/styles';
-import themeConfig from 'src/configs/themeConfig';
+import Link from 'next/link'
+import { Box, Typography } from '@mui/material'
+import { styled, useTheme } from '@mui/material/styles'
+import themeConfig from 'src/configs/themeConfig'
 
 // ** Styled Components
 const MenuHeaderWrapper = styled(Box)(({ theme }) => ({
@@ -10,7 +10,8 @@ const MenuHeaderWrapper = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
   paddingRight: theme.spacing(4.5),
   transition: 'padding .25s ease-in-out',
-  minHeight: theme.mixins.toolbar.minHeight
+  minHeight: theme.mixins.toolbar.minHeight,
+  boxShadow: '-9px 0 20px rgba(89, 102, 122, 0.1)'
 }))
 
 const HeaderTitle = styled(Typography)(({ theme }) => ({
@@ -31,9 +32,6 @@ const VerticalNavHeader = props => {
   // ** Props
   const { verticalNavMenuBranding: userVerticalNavMenuBranding } = props
 
-  // ** Hooks
-  const theme = useTheme()
-
   return (
     <MenuHeaderWrapper className='nav-header' sx={{ pl: 6 }}>
       {userVerticalNavMenuBranding ? (
@@ -41,9 +39,7 @@ const VerticalNavHeader = props => {
       ) : (
         <Link href='/' passHref>
           <StyledLink>
-            <HeaderTitle variant='h6'>
-              {themeConfig.templateName}
-            </HeaderTitle>
+            <HeaderTitle variant='h6'>{themeConfig.templateName}</HeaderTitle>
           </StyledLink>
         </Link>
       )}
@@ -51,4 +47,4 @@ const VerticalNavHeader = props => {
   )
 }
 
-export default VerticalNavHeader;
+export default VerticalNavHeader

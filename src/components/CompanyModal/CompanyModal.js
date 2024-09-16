@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, Dialog, DialogContent, DialogTitle, Typography } from '@mui/material'
+import { Box, Button, Dialog, DialogContent, DialogTitle, Typography, useTheme } from '@mui/material'
 import CompanyForm from './CompanyForm'
 
 const CompanyModal = ({
@@ -14,11 +14,22 @@ const CompanyModal = ({
   addCompany,
   editCompany
 }) => {
+  const theme = useTheme()
   return (
     <Box>
       {value === 'active' ? (
-        <Box sx={{ mt: 3, textAlign: 'end' }}>
-          <Button variant='contained' onClick={handleClickOpen('body')} sx={{ lineHeight: 0, padding: '20px 25px' }}>
+        <Box>
+          <Button
+            variant='contained'
+            onClick={handleClickOpen('body')}
+            sx={{
+              lineHeight: 0,
+              padding: '20px 25px',
+              '&.MuiButton-root:hover': {
+                backgroundColor: theme.palette.primary.hover
+              }
+            }}
+          >
             Add Company
           </Button>
         </Box>

@@ -10,6 +10,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { motion } from 'framer-motion'
 
 const Tab = styled(MuiTab)(({ theme }) => ({
+  lineHeight: 1,
   [theme.breakpoints.down('md')]: {
     minWidth: 100
   },
@@ -19,7 +20,7 @@ const Tab = styled(MuiTab)(({ theme }) => ({
 }))
 
 const TabName = styled('span')(({ theme }) => ({
-  lineHeight: 1.71,
+  // lineHeight: 1.71,
   fontSize: '0.875rem',
   marginLeft: theme.spacing(2.4),
   [theme.breakpoints.down('md')]: {
@@ -42,7 +43,7 @@ const AccountSettings = () => {
       exist={{ opacity: 0, y: 15 }}
       transition={{ delay: 0.25 }}
     >
-      <Card>
+      <Card sx={{ boxShadow: '0px 9px 20px rgba(46, 35, 94, 0.07)' }}>
         <TabContext value={value}>
           <TabList
             onChange={handleChange}

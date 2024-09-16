@@ -10,18 +10,78 @@ import { handleURLQueries } from 'src/@core/layouts/utils'
 // ** Styled Components
 const MenuNavLink = styled(ListItemButton)(({ theme }) => ({
   width: '100%',
-  borderTopRightRadius: 100,
-  borderBottomRightRadius: 100,
   marginBottom: 5,
-  color: theme.palette.text.primary,
-  padding: theme.spacing(2.25, 3.5),
+  padding: '12px 20px',
   transition: 'opacity .25s ease-in-out, background .25s ease-in-out, color .25s ease-in-out',
-  '&.active, &.active:hover': {
-    boxShadow: theme.shadows[3],
-    backgroundImage: `linear-gradient(98deg, ${theme.palette.customColors.primaryGradient}, ${theme.palette.primary.main} 94%)`
+  position: 'relative', // Required to position the ::after element
+
+  // Styles for normal state (inactive)
+  '& .MuiTypography-root': {
+    fontWeight: 500, // Normal font weight,
+    fontSize: '15px'
   },
-  '&.active .MuiTypography-root, &.active .MuiSvgIcon-root': {
-    color: `${theme.palette.common.white} !important`
+
+  '&:hover .MuiTypography-root': {
+    color: '#7366FF' // Text and icon color on hover
+  },
+
+  '&:hover .MuiSvgIcon-root': {
+    color: '#7366FF' // Text and icon color on hover
+  },
+
+  // Hover effect for both active and inactive states
+  '&:hover': {
+    backgroundColor: theme.palette.customColors.listHover // Background color on hover
+  },
+
+  // Styles for the active class
+  '&.active, &.active:hover': {
+    transition: 'all 0.5s ease',
+    backgroundColor: theme.palette.customColors.listHover,
+    color: '#7366FF' // Text and icon color when active
+  },
+
+  // Styles for the ::after pseudo-element when the active class is applied
+  '&.active::after': {
+    content: '""',
+    position: 'absolute',
+    width: '4px',
+    height: '35px',
+    right: '0',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    backgroundColor: '#7366FF',
+    borderRadius: '5px 0px 0px 5px',
+    opacity: 1,
+    visibility: 'visible',
+    transition: 'opacity 0.5s ease, visibility 0.5s ease'
+  },
+
+  // By default, the ::after element should be hidden
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    width: '4px',
+    height: '35px',
+    right: '0',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    backgroundColor: '#7366FF',
+    borderRadius: '5px 0px 0px 5px',
+    opacity: 0,
+    visibility: 'hidden',
+    transition: 'opacity 0.5s ease, visibility 0.5s ease'
+  },
+
+  // Ensure the icon color changes when active
+  '&.active .MuiSvgIcon-root': {
+    color: '#7366FF' // Icon color when active
+  },
+
+  // Ensure the text color and font weight change when active
+  '&.active .MuiTypography-root': {
+    color: '#7366FF', // Text color when active
+    fontWeight: 600 // Font weight when active
   }
 }))
 
@@ -81,7 +141,7 @@ const VerticalNavLink = ({ item, navVisible, toggleNavVisibility }) => {
             <ListItemIcon
               sx={{
                 mr: 2.5,
-                color: 'text.primary',
+                // color: 'text.primary',
                 transition: 'margin .25s ease-in-out'
               }}
             >

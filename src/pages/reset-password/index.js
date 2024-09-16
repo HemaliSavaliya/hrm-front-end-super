@@ -173,7 +173,18 @@ const ResetPasswordPage = () => {
               />
             </FormControl>
 
-            <Button fullWidth size='large' variant='contained' sx={{ marginTop: 7 }} type='submit'>
+            <Button
+              fullWidth
+              size='large'
+              variant='contained'
+              sx={{
+                marginTop: 7,
+                '&.MuiButton-root:hover': {
+                  backgroundColor: theme.palette.primary.hover
+                }
+              }}
+              type='submit'
+            >
               Reset
             </Button>
             {/* <Divider sx={{ my: 5 }} />

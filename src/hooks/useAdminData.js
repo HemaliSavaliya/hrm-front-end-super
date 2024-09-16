@@ -5,13 +5,32 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
 const useAdminData = () => {
-  const [adminData, setAdminData] = useState([])
-  const [adminDataIn, setAdminDataIn] = useState([])
   const [editAdminId, setEditAdminId] = useState(null)
   const [open, setOpen] = useState(false)
   const [scroll, setScroll] = useState('body')
+
+  // Active admin states
+  const [adminData, setAdminData] = useState([])
   const [loading, setLoading] = useState(true)
+  const [totalItems, setTotalItems] = useState(0)
+  const [totalPages, setTotalPages] = useState(0)
+  const [page, setPage] = useState(0) // Pagination starts from 0
+  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [search, setSearch] = useState('')
+  const [sortBy, setSortBy] = useState('name')
+  const [sortOrder, setSortOrder] = useState('asc')
+
+  // Inactive admin states
+  const [adminDataIn, setAdminDataIn] = useState([])
   const [loadingIn, setLoadingIn] = useState(true)
+  const [totalItemsIn, setTotalItemsIn] = useState(0)
+  const [totalPagesIn, setTotalPagesIn] = useState(0)
+  const [pageIn, setPageIn] = useState(0)
+  const [rowsPerPageIn, setRowsPerPageIn] = useState(5)
+  const [searchIn, setSearchIn] = useState('')
+  const [sortByIn, setSortByIn] = useState('name')
+  const [sortOrderIn, setSortOrderIn] = useState('asc')
+
   const authToken = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('login-details')) : null
   const theme = useTheme()
 
@@ -31,35 +50,70 @@ const useAdminData = () => {
     setOpen(true)
   }
 
-  const fetchData = async () => {
+  // Function to handle fetch of active admin
+  const fetchActiveData = async () => {
     setLoading(true)
-    setLoadingIn(true)
-
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/adminList`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/admin-active-list`, {
         headers: {
           Authorization: `Bearer ${authToken?.token}`
+        },
+        params: {
+          page: page + 1,
+          limit: rowsPerPage,
+          search,
+          sortBy,
+          sortOrder
         }
       })
 
-      const activeAdmins = response.data.filter(del => del.deleted === 0)
-      const inactiveAdmins = response.data.filter(del => del.deleted === 1)
+      const { data, totalItems, totalPages } = response.data
 
-      setAdminData(activeAdmins)
-      setAdminDataIn(inactiveAdmins)
+      setAdminData(data)
+      setTotalItems(totalItems)
+      setTotalPages(totalPages)
     } catch (error) {
-      console.error('Error fetching Admin', error)
+      console.error('Error fetching active admin:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Function to handle fetch of inactive companies
+  const fetchInactiveData = async () => {
+    setLoadingIn(true)
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/admin-inactive-list`, {
+        headers: {
+          Authorization: `Bearer ${authToken?.token}`
+        },
+        params: {
+          page: pageIn + 1,
+          limit: rowsPerPageIn,
+          search: searchIn,
+          sortBy: sortByIn,
+          sortOrder: sortOrderIn
+        }
+      })
+
+      const { data, totalItems, totalPages } = response.data
+
+      setAdminDataIn(data)
+      setTotalItemsIn(totalItems)
+      setTotalPagesIn(totalPages)
+    } catch (error) {
+      console.error('Error fetching inactive admin:', error)
+    } finally {
       setLoadingIn(false)
     }
   }
 
   useEffect(() => {
     if (authToken?.token) {
-      fetchData()
+      fetchActiveData()
+      fetchInactiveData()
     }
-  }, [authToken?.token])
+  }, [authToken?.token, page, rowsPerPage, sortBy, sortOrder, pageIn, rowsPerPageIn, sortByIn, sortOrderIn])
 
   // Function to add form data to localStorage
   const addAdmin = async newAdmin => {
@@ -93,11 +147,10 @@ const useAdminData = () => {
           setAdminData(prevData => [...prevData, response.data])
           setOpen(false)
 
-          await fetchData()
+          await fetchActiveData()
         }, 1000) // 1000 milliseconds = 1 seconds
       }
     } catch (error) {
-      console.error('Error Adding Admin', error)
       toast.error('Error Adding Admin. Please try again.', {
         duration: 2000,
         position: 'top-center',
@@ -137,11 +190,11 @@ const useAdminData = () => {
         })
 
         // Wait for the fetchData to complete before proceeding
-        await fetchData()
+        await fetchActiveData()
+        await fetchInactiveData()
         setEditAdminId(null)
       }, 1000) // 1000 milliseconds = 1 seconds
     } catch (error) {
-      console.error('Error Updating Admin', error)
       toast.error('Error Updating Admin. Please try again.', {
         duration: 2000,
         position: 'top-center',
@@ -186,10 +239,10 @@ const useAdminData = () => {
 
       setTimeout(async () => {
         // Wait for the fetchData to complete before proceeding
-        await fetchData()
+        await fetchActiveData()
+        await fetchInactiveData()
       }, 1000) // 1000 milliseconds = 1 seconds
     } catch (error) {
-      console.error('Error deleting Admin', error)
       toast.error('Error Enabled Admin. Please try again.', {
         duration: 2000,
         position: 'top-center',
@@ -203,10 +256,6 @@ const useAdminData = () => {
   }
 
   return {
-    loading,
-    loadingIn,
-    adminData,
-    adminDataIn,
     editAdminId,
     addAdmin,
     editAdmin,
@@ -216,7 +265,37 @@ const useAdminData = () => {
     scroll,
     handleClickOpen,
     handleClose,
-    handleEdit
+    handleEdit,
+
+    // Active companies
+    loading,
+    adminData,
+    totalItems,
+    // totalPages,
+    page,
+    rowsPerPage,
+    search,
+    setPage,
+    setRowsPerPage,
+    setSearch,
+    setSortBy,
+    setSortOrder,
+    fetchActiveData,
+
+    // Inactive companies
+    loadingIn,
+    adminDataIn,
+    totalItemsIn,
+    // totalPagesIn,
+    pageIn,
+    rowsPerPageIn,
+    searchIn,
+    setPageIn,
+    setRowsPerPageIn,
+    setSearchIn,
+    setSortByIn,
+    setSortOrderIn,
+    fetchInactiveData
   }
 }
 

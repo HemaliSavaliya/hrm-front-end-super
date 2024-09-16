@@ -5,14 +5,33 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
 const useCompanyData = () => {
-  const [companyData, setCompanyData] = useState([])
-  const [companyDataIn, setCompanyDataIn] = useState([])
   const [editCompanyId, setEditCompanyId] = useState(null)
   const [open, setOpen] = useState(false)
   const [scroll, setScroll] = useState('body')
   const [logoUrls, setLogoUrls] = useState({})
+
+  // Active companies states
+  const [companyData, setCompanyData] = useState([])
   const [loading, setLoading] = useState(true)
+  const [totalItems, setTotalItems] = useState(0)
+  const [totalPages, setTotalPages] = useState(0)
+  const [page, setPage] = useState(0) // Pagination starts from 0
+  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [search, setSearch] = useState('')
+  const [sortBy, setSortBy] = useState('companyName')
+  const [sortOrder, setSortOrder] = useState('asc')
+
+  // Inactive companies states
+  const [companyDataIn, setCompanyDataIn] = useState([])
   const [loadingIn, setLoadingIn] = useState(true)
+  const [totalItemsIn, setTotalItemsIn] = useState(0)
+  const [totalPagesIn, setTotalPagesIn] = useState(0)
+  const [pageIn, setPageIn] = useState(0)
+  const [rowsPerPageIn, setRowsPerPageIn] = useState(5)
+  const [searchIn, setSearchIn] = useState('')
+  const [sortByIn, setSortByIn] = useState('companyName')
+  const [sortOrderIn, setSortOrderIn] = useState('asc')
+
   const authToken = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('login-details')) : null
   const theme = useTheme()
 
@@ -32,35 +51,71 @@ const useCompanyData = () => {
     setOpen(true)
   }
 
-  const fetchData = async () => {
+  // Function to handle fetch of active companies
+  const fetchActiveData = async () => {
     setLoading(true)
-    setLoadingIn(true)
-
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/company-list`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/company-active-list`, {
         headers: {
           Authorization: `Bearer ${authToken?.token}`
+        },
+        params: {
+          page: page + 1,
+          limit: rowsPerPage,
+          search,
+          sortBy,
+          sortOrder
         }
       })
 
-      const activeCompanies = response.data.filter(del => del.deleted === 0)
-      const inactiveCompanies = response.data.filter(del => del.deleted === 1)
+      const { data, totalItems, totalPages } = response.data
 
-      setCompanyData(activeCompanies)
-      setCompanyDataIn(inactiveCompanies)
+      setCompanyData(data)
+      setTotalItems(totalItems)
+      setTotalPages(totalPages)
     } catch (error) {
-      console.error('Error fetching Company', error)
+      console.error('Error fetching active companies:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Function to handle fetch of inactive companies
+  const fetchInactiveData = async () => {
+    setLoadingIn(true)
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/company-inactive-list`, {
+        headers: {
+          Authorization: `Bearer ${authToken?.token}`
+        },
+        params: {
+          page: pageIn + 1,
+          limit: rowsPerPageIn,
+          search: searchIn,
+          sortBy: sortByIn,
+          sortOrder: sortOrderIn
+        }
+      })
+
+      const { data, totalItems, totalPages } = response.data
+
+      setCompanyDataIn(data)
+      setTotalItemsIn(totalItems)
+      setTotalPagesIn(totalPages)
+    } catch (error) {
+      console.error('Error fetching inactive companies:', error)
+    } finally {
       setLoadingIn(false)
     }
   }
 
+  // Fetch data when state changes
   useEffect(() => {
     if (authToken?.token) {
-      fetchData()
+      fetchActiveData()
+      fetchInactiveData()
     }
-  }, [authToken?.token])
+  }, [authToken?.token, page, rowsPerPage, sortBy, sortOrder, pageIn, rowsPerPageIn, sortByIn, sortOrderIn])
 
   // Function to add form data to localStorage
   const addCompany = async newCompany => {
@@ -95,11 +150,10 @@ const useCompanyData = () => {
           setCompanyData(prevData => [...prevData, response.data])
           setOpen(false)
 
-          await fetchData()
+          await fetchActiveData()
         }, 1000) // 1000 milliseconds = 1 seconds
       }
     } catch (error) {
-      console.error('Error Adding Company', error)
       toast.error('Error Adding Company. Please try again.', {
         duration: 2000,
         position: 'top-center',
@@ -140,11 +194,11 @@ const useCompanyData = () => {
         })
 
         // Wait for the fetchData to complete before proceeding
-        await fetchData()
+        await fetchActiveData()
+        await fetchInactiveData()
         setEditCompanyId(null)
       }, 1000) // 1000 milliseconds = 1 seconds
     } catch (error) {
-      console.error('Error Updating Company', error)
       toast.error('Error Updating Company. Please try again.', {
         duration: 2000,
         position: 'top-center',
@@ -189,10 +243,10 @@ const useCompanyData = () => {
 
       setTimeout(async () => {
         // Wait for the fetchData to complete before proceeding
-        await fetchData()
+        await fetchActiveData()
+        await fetchInactiveData()
       }, 1000)
     } catch (error) {
-      console.error('Error deleting Company', error)
       toast.error('Error Enabled/Disabled Company. Please try again.', {
         duration: 2000,
         position: 'top-center',
@@ -237,10 +291,6 @@ const useCompanyData = () => {
   }, [companyData, companyDataIn])
 
   return {
-    loading,
-    loadingIn,
-    companyData,
-    companyDataIn,
     editCompanyId,
     addCompany,
     editCompany,
@@ -251,7 +301,37 @@ const useCompanyData = () => {
     handleClickOpen,
     handleClose,
     handleEdit,
-    logoUrls
+    logoUrls,
+
+    // Active companies
+    loading,
+    companyData,
+    totalItems,
+    totalPages,
+    page,
+    rowsPerPage,
+    search,
+    setPage,
+    setRowsPerPage,
+    setSearch,
+    setSortBy,
+    setSortOrder,
+    fetchActiveData,
+
+    // Inactive companies
+    loadingIn,
+    companyDataIn,
+    totalItemsIn,
+    totalPagesIn,
+    pageIn,
+    rowsPerPageIn,
+    searchIn,
+    setPageIn,
+    setRowsPerPageIn,
+    setSearchIn,
+    setSortByIn,
+    setSortOrderIn,
+    fetchInactiveData
   }
 }
 

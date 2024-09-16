@@ -108,7 +108,6 @@ const useForgotPasswordData = () => {
         }
       })
     } catch (error) {
-      console.error('Error updating password:', error)
       toast.error('Error Updating Employee/HR Password. Please try again.', {
         duration: 2000,
         position: 'top-center',

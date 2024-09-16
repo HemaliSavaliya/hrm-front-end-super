@@ -1,41 +1,40 @@
-import IconButton from '@mui/material/IconButton';
+import IconButton from '@mui/material/IconButton'
 
 // ** Icons Imports
-import WeatherNight from 'mdi-material-ui/WeatherNight';
-import WeatherSunny from 'mdi-material-ui/WeatherSunny';
-import { useEffect } from 'react';
+import { Lightbulb, LightbulbOutline } from 'mdi-material-ui'
+import { useEffect } from 'react'
 
 const ModeToggler = props => {
   // ** Props
-  const { settings, saveSettings } = props;
+  const { settings, saveSettings } = props
 
   // Load mode from local storage on component mount
   useEffect(() => {
-    const storedMode = localStorage.getItem('mode');
+    const storedMode = localStorage.getItem('mode')
     if (storedMode) {
-      saveSettings({ ...settings, mode: storedMode });
+      saveSettings({ ...settings, mode: storedMode })
     }
-  }, []);
+  }, [])
 
   const handleModeChange = mode => {
     // Save mode to local storage
-    localStorage.setItem('mode', mode);
-    saveSettings({ ...settings, mode });
+    localStorage.setItem('mode', mode)
+    saveSettings({ ...settings, mode })
   }
 
   const handleModeToggle = () => {
     if (settings.mode === 'light') {
-      handleModeChange('dark');
+      handleModeChange('dark')
     } else {
-      handleModeChange('light');
+      handleModeChange('light')
     }
   }
 
   return (
     <IconButton color='inherit' aria-haspopup='true' onClick={handleModeToggle}>
-      {settings.mode === 'dark' ? <WeatherSunny /> : <WeatherNight />}
+      {settings.mode === 'dark' ? <Lightbulb /> : <LightbulbOutline />}
     </IconButton>
   )
 }
 
-export default ModeToggler;
+export default ModeToggler

@@ -14,7 +14,8 @@ import {
   OutlinedInput,
   Select,
   TextField,
-  Typography
+  Typography,
+  useTheme
 } from '@mui/material'
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
@@ -31,6 +32,7 @@ const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, edi
     companyData,
     fetchCompany
   } = AdminModalLogic(adminData, editAdminId)
+  const theme = useTheme()
 
   const descriptionElementRef = useRef(null)
   const [loading, setLoading] = useState(false) // Add loading state
@@ -58,6 +60,7 @@ const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, edi
 
     setLoading(true) // Set loading to true when starting submission
 
+    // Convert company name to company ID before submitting
     const adminToSubmit = { ...formData, companyId: companyData.find(c => c.companyName === formData.companyId)?.id }
 
     try {
@@ -70,7 +73,6 @@ const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, edi
       setOpen(false)
     } catch (error) {
       console.error('Error submitting the form:', error)
-      // Handle error here (e.g., show an error message)
     } finally {
       setLoading(false) // Set loading to false once submission is done
     }
@@ -172,7 +174,14 @@ const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, edi
           <Button
             size='large'
             type='submit'
-            sx={{ mr: 2, lineHeight: 0, padding: '20px 25px !important' }}
+            sx={{
+              mr: 2,
+              lineHeight: 0,
+              padding: '20px 25px !important',
+              '&.MuiButton-root:hover': {
+                backgroundColor: theme.palette.primary.hover
+              }
+            }}
             variant='contained'
             disabled={loading} // Disable button while loading
           >
