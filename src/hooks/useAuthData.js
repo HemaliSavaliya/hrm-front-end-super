@@ -63,6 +63,7 @@ const useAuth = () => {
 
           // Store the token in localStorage or secure storage for future API requests
           localStorage.setItem('login-details', JSON.stringify({ token, role, email, name, id }))
+          sessionStorage.setItem('login-details', JSON.stringify({ token, role, email, name, id }))
 
           setTimeout(() => {
             const returnUrl = router.query.returnUrl || '/'

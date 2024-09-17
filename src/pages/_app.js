@@ -36,7 +36,8 @@ const App = props => {
 
   useEffect(() => {
     // Check for the presence of a token after the initial render
-    const loginToken = JSON.parse(localStorage.getItem('login-details'))
+    // const loginToken = JSON.parse(localStorage.getItem('login-details'))
+    const loginToken = JSON.parse(sessionStorage.getItem('login-details'))
 
     if (loginToken?.token) {
       setAuthorized(true)

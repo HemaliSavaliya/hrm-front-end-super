@@ -132,6 +132,7 @@ const Dashboard = () => {
     localStorage.setItem('sent-notifications', JSON.stringify(sentNotifications))
   }
 
+
   // Delete the notification
   const deleteNotification = async id => {
     try {
@@ -190,7 +191,7 @@ const Dashboard = () => {
           {notifications.length > 0 ? (
             notifications.map(notification => (
               <Grid item xs={12} sm={6} md={4} lg={4} position={'relative'} key={notification.id}>
-                <Card sx={{ p: 5, boxShadow: '0px 9px 20px rgba(46, 35, 94, 0.07)' }}>
+                <Card sx={{ p: 5, boxShadow: '0px 9px 20px rgba(46, 35, 94, 0.07)', height: { xs: 'auto', sm: "200px", md: "200px", lg: "180px" } }}>
                   <Typography variant='subtitle2'>
                     <strong>Company Name:</strong> {notification.companyName}
                   </Typography>

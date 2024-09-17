@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/link-passhref */
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Box, Menu, Badge, Avatar, Divider, MenuItem, Typography } from '@mui/material'
+import { Box, Menu, Badge, MenuItem, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import LogoutVariant from 'mdi-material-ui/LogoutVariant'
 import axios from 'axios'
@@ -65,6 +65,7 @@ const UserDropdown = () => {
 
       // Remove the login-details object from local storage
       localStorage.removeItem('login-details')
+      sessionStorage.removeItem('login-details')
 
       // Redirect to the sign-in page
       router.push('/login')
@@ -74,11 +75,39 @@ const UserDropdown = () => {
     }
   }
 
+  useEffect(() => {
+    // Handle tab/browser close
+    const handleBeforeUnload = (event) => {
+      // Clean up session storage
+      sessionStorage.removeItem('login-details')
+    }
+
+    // Add event listener
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    // Clean up the event listener
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [])
+
+  useEffect(() => {
+    // Check token validity on page load
+    const checkToken = () => {
+      const token = typeof window !== 'undefined' ? JSON.parse(sessionStorage.getItem('login-details')) : null
+
+      if (!token) {
+        router.push('/login')
+      }
+    }
+
+    checkToken()
+  }, [router])
+
   return (
     <Fragment>
       <Badge
         overlap='circular'
-        // onClick={handleDropdownOpen}
         sx={{ ml: 2, cursor: 'pointer' }}
         badgeContent={<BadgeContentSpan />}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -88,12 +117,6 @@ const UserDropdown = () => {
             {authToken?.name.charAt(0).toUpperCase()}
           </Typography>
         </AvatarStyled>
-        {/* <Avatar
-          alt='John Doe'
-          // onClick={handleDropdownOpen}
-          sx={{ width: 40, height: 40 }}
-          src='/images/avatars/1.png'
-        /> */}
       </Badge>
       <Box ml={4} sx={{ cursor: 'pointer' }} onClick={handleDropdownOpen}>
         <Typography sx={{ fontWeight: 600, textTransform: 'capitalize' }}>{authToken?.name}</Typography>
@@ -119,24 +142,6 @@ const UserDropdown = () => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        {/* <Box sx={{ pt: 2, pb: 3, px: 4 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Badge
-              overlap='circular'
-              badgeContent={<BadgeContentSpan />}
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            >
-              <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
-            </Badge>
-            <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 600 }}>{authToken?.email}</Typography>
-              <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
-                {authToken?.role}
-              </Typography>
-            </Box>
-          </Box>
-        </Box> */}
-        {/* <Divider sx={{ mt: 0, mb: 1 }} /> */}
         <Link href={'/account-settings'} style={{ textDecoration: 'none' }}>
           <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
             <Box sx={styles}>
