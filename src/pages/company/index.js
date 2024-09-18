@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Box } from '@mui/material'
+import { useState } from 'react'
+import { Box, Tooltip } from '@mui/material'
 import { TabList, TabPanel, TabContext } from '@mui/lab'
 import { styled, useTheme } from '@mui/material/styles'
 import MuiTab from '@mui/material/Tab'
@@ -59,19 +59,23 @@ const Company = () => {
             <Tab
               value='active'
               label={
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <BankOutline />
-                  <TabName>Active Company</TabName>
-                </Box>
+                <Tooltip title='Active Company'>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <BankOutline />
+                    <TabName>Active Company</TabName>
+                  </Box>
+                </Tooltip>
               }
             />
             <Tab
               value='inactive'
               label={
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <BankOffOutline />
-                  <TabName>Inactive Company</TabName>
-                </Box>
+                <Tooltip title='Inactive Company'>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <BankOffOutline />
+                    <TabName>Inactive Company</TabName>
+                  </Box>
+                </Tooltip>
               }
             />
           </TabList>

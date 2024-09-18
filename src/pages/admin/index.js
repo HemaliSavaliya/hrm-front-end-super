@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Box, Card, useTheme } from '@mui/material'
+import { useState } from 'react'
+import { Box, Tooltip, useTheme } from '@mui/material'
 import { TabList, TabPanel, TabContext } from '@mui/lab'
 import { styled } from '@mui/material/styles'
 import MuiTab from '@mui/material/Tab'
@@ -59,19 +59,23 @@ const Admin = () => {
             <Tab
               value='active'
               label={
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <AccountLockOpenOutline />
-                  <TabName>Active Admin</TabName>
-                </Box>
+                <Tooltip title='Active Admin'>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <AccountLockOpenOutline />
+                    <TabName>Active Admin</TabName>
+                  </Box>
+                </Tooltip>
               }
             />
             <Tab
               value='inactive'
               label={
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <AccountLockOutline />
-                  <TabName>Inactive Admin</TabName>
-                </Box>
+                <Tooltip title='Inactive Admin'>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <AccountLockOutline />
+                    <TabName>Inactive Admin</TabName>
+                  </Box>
+                </Tooltip>
               }
             />
           </TabList>

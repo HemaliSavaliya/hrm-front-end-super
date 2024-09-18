@@ -1,5 +1,5 @@
-import { Box, IconButton, useMediaQuery, useTheme } from '@mui/material'
-import Menu from 'mdi-material-ui/Menu'
+import { Box, IconButton, useMediaQuery } from '@mui/material'
+import { DragHorizontalVariant } from 'mdi-material-ui'
 import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
 import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
 
@@ -26,7 +26,7 @@ const AppBarContent = props => {
             onClick={toggleNavVisibility}
             sx={{ ml: -2.75, ...(hiddenSm ? {} : { mr: 3.5 }) }}
           >
-            <Menu />
+            <DragHorizontalVariant />
           </IconButton>
         ) : null}
       </Box>

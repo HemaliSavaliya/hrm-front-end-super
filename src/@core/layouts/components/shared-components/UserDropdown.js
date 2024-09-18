@@ -65,7 +65,6 @@ const UserDropdown = () => {
 
       // Remove the login-details object from local storage
       localStorage.removeItem('login-details')
-      sessionStorage.removeItem('login-details')
 
       // Redirect to the sign-in page
       router.push('/login')
@@ -74,35 +73,6 @@ const UserDropdown = () => {
       console.error('Logout failed:', error)
     }
   }
-
-  useEffect(() => {
-    // Handle tab/browser close
-    const handleBeforeUnload = (event) => {
-      // Clean up session storage
-      sessionStorage.removeItem('login-details')
-    }
-
-    // Add event listener
-    window.addEventListener('beforeunload', handleBeforeUnload)
-
-    // Clean up the event listener
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload)
-    }
-  }, [])
-
-  useEffect(() => {
-    // Check token validity on page load
-    const checkToken = () => {
-      const token = typeof window !== 'undefined' ? JSON.parse(sessionStorage.getItem('login-details')) : null
-
-      if (!token) {
-        router.push('/login')
-      }
-    }
-
-    checkToken()
-  }, [router])
 
   return (
     <Fragment>

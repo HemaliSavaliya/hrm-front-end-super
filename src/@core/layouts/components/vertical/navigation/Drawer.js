@@ -1,7 +1,9 @@
 // ** MUI Imports
+import { useMediaQuery } from '@mui/material'
 import { styled, useTheme } from '@mui/material/styles'
 import MuiSwipeableDrawer from '@mui/material/SwipeableDrawer'
 import { motion } from 'framer-motion'
+import themeConfig from 'src/configs/themeConfig'
 
 const SwipeableDrawer = styled(MuiSwipeableDrawer)({
   overflowX: 'hidden',
@@ -23,7 +25,9 @@ const SwipeableDrawer = styled(MuiSwipeableDrawer)({
 
 const Drawer = props => {
   // ** Props
-  const { hidden, children, navWidth, navVisible, setNavVisible } = props
+  const { hidden, children, navWidth, navVisible, setNavVisible, isHovered, handleMouseEnter, handleMouseLeave } = props
+
+  const isDesktop = useMediaQuery(theme => theme.breakpoints.up('md'))
 
   // ** Hook
   const theme = useTheme()
@@ -51,14 +55,29 @@ const Drawer = props => {
   }
 
   return (
-    <motion.main variants={variants} initial='hidden' animate='enter' transition={{ type: 'linear' }}>
+    <motion.main
+      variants={variants}
+      initial='hidden'
+      animate='enter'
+      transition={{ type: 'linear' }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <SwipeableDrawer
+        disableSwipeToOpen={!isDesktop}
         className='layout-vertical-nav'
         variant={hidden ? 'temporary' : 'permanent'}
         {...(hidden ? { ...MobileDrawerProps } : { ...DesktopDrawerProps })}
-        PaperProps={{ sx: { width: navWidth } }}
+        PaperProps={{
+          sx: {
+            width: isDesktop && !isHovered ? navWidth : themeConfig.navigationSize // Set width to 260 on desktop, auto on mobile
+          }
+        }}
         sx={{
-          width: navWidth,
+          width: isDesktop ? navWidth : themeConfig.navigationSize, // Set width to 260 on desktop, auto on mobile
+          '&:hover': {
+            width: isDesktop ? navWidth : themeConfig.navigationSize // Set width to 260 on hover on desktop, auto on mobile
+          },
           '& .MuiDrawer-paper': {
             borderRight: 0,
             backgroundColor: theme.palette.background.paper,
