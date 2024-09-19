@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/link-passhref */
-import { useState, Fragment, useEffect } from 'react'
+import { useState, Fragment } from 'react'
 import { useRouter } from 'next/router'
-import { Box, Menu, Badge, MenuItem, Typography } from '@mui/material'
+import { Box, Menu, Badge, MenuItem, Typography, useTheme } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import LogoutVariant from 'mdi-material-ui/LogoutVariant'
 import axios from 'axios'
@@ -46,6 +46,7 @@ const styles = {
 const UserDropdown = () => {
   const [anchorEl, setAnchorEl] = useState(null)
   const router = useRouter()
+  const theme = useTheme()
   const authToken = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('login-details')) : null
 
   const handleDropdownOpen = event => {
@@ -98,7 +99,7 @@ const UserDropdown = () => {
             fontSize='10px'
             sx={{
               '&.MuiSvgIcon-root': {
-                fill: 'rgba(58, 53, 65, 0.38) !important'
+                fill: theme.palette.customColors.svgIcon
               }
             }}
           />

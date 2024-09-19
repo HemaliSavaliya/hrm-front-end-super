@@ -43,20 +43,8 @@ const LayoutAppBar = props => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2, duration: 0.5 }}
     >
-      <AppBar
-        elevation={0}
-        className='layout-navbar'
-        position='static'
-      >
-        <Toolbar
-          className='navbar-content-container'
-
-          // sx={{
-          //   ...(contentWidth === 'boxed' && {
-          //     '@media (min-width:1440px)': { maxWidth: `calc(1440px - ${theme.spacing(6)} * 2)` }
-          //   })
-          // }}
-        >
+      <AppBar elevation={0} className='layout-navbar' position='static'>
+        <Toolbar className='navbar-content-container'>
           {(userVerticalAppBarContent && userVerticalAppBarContent(props)) || null}
         </Toolbar>
       </AppBar>

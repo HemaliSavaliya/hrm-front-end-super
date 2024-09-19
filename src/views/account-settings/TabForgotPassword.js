@@ -142,6 +142,8 @@ const TabForgotPassword = () => {
           <Button
             variant='contained'
             sx={{
+              lineHeight: 0,
+              padding: '20px 25px !important',
               marginRight: 3.5,
               '&.MuiButton-root:hover': {
                 backgroundColor: theme.palette.primary.hover
@@ -155,6 +157,7 @@ const TabForgotPassword = () => {
             type='reset'
             variant='outlined'
             color='secondary'
+            sx={{ lineHeight: 0, padding: '20px 25px !important' }}
             onClick={() => setValues({ ...values, employeeId: '', newPassword: '', confirmPassword: '' })}
           >
             Reset

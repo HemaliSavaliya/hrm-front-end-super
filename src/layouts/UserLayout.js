@@ -1,35 +1,39 @@
-import useMediaQuery from '@mui/material/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery'
+import themeConfig from 'src/configs/themeConfig'
 
 // !Do not remove this Layout import
-import VerticalLayout from 'src/@core/layouts/VerticalLayout';
-import VerticalNavItems from 'src/navigation/vertical';
-import VerticalAppBarContent from './components/vertical/AppBarContent';
-import { useSettings } from 'src/@core/hooks/useSettings';
+import VerticalLayout from 'src/@core/layouts/VerticalLayout'
+import VerticalNavItems from 'src/navigation/vertical'
+import VerticalAppBarContent from './components/vertical/AppBarContent'
+import { useSettings } from 'src/@core/hooks/useSettings'
+import { Box } from '@mui/material'
 
 const UserLayout = ({ children }) => {
-  const { settings, saveSettings } = useSettings();
-  const hidden = useMediaQuery(theme => theme.breakpoints.down('lg'));
+  const { settings, saveSettings } = useSettings()
+  const hidden = useMediaQuery(theme => theme.breakpoints.down('lg'))
 
   return (
-    <VerticalLayout
-      hidden={hidden}
-      settings={settings}
-      saveSettings={saveSettings}
-      verticalNavItems={VerticalNavItems()} // Navigation Items
-      verticalAppBarContent={(
-        props // AppBar Content
-      ) => (
-        <VerticalAppBarContent
-          hidden={hidden}
-          settings={settings}
-          saveSettings={saveSettings}
-          toggleNavVisibility={props.toggleNavVisibility}
-        />
-      )}
-    >
-      {children}
-    </VerticalLayout>
+    <>
+      <VerticalLayout
+        hidden={hidden}
+        settings={settings}
+        saveSettings={saveSettings}
+        verticalNavItems={VerticalNavItems()} // Navigation Items
+        verticalAppBarContent={(
+          props // AppBar Content
+        ) => (
+          <VerticalAppBarContent
+            hidden={hidden}
+            settings={settings}
+            saveSettings={saveSettings}
+            toggleNavVisibility={props.toggleNavVisibility}
+          />
+        )}
+      >
+        {children}
+      </VerticalLayout>
+    </>
   )
 }
 
-export default UserLayout;
+export default UserLayout

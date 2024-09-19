@@ -142,6 +142,8 @@ const TabSecurity = () => {
             variant='contained'
             sx={{
               marginRight: 3.5,
+              lineHeight: 0,
+              padding: '20px 25px !important',
               '&.MuiButton-root:hover': {
                 backgroundColor: theme.palette.primary.hover
               }
@@ -154,6 +156,7 @@ const TabSecurity = () => {
             type='reset'
             variant='outlined'
             color='secondary'
+            sx={{ lineHeight: 0, padding: '20px 25px !important' }}
             onClick={() => setValues({ ...values, password: '', newPassword: '', confirmPassword: '' })}
           >
             Reset

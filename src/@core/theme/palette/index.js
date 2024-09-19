@@ -26,7 +26,8 @@ const DefaultPalette = (mode, themeColor) => {
       primaryGradient: primaryGradient(),
       tableHeaderBg: mode === 'light' ? '#F9FAFC' : '#3D3759',
       borderPrimary: mode === 'light' ? '#eaebee' : '#4a4b4f',
-      listHover: mode === 'light' ? '#f1f0ff' : 'rgba(115, 102, 255, 0.2)'
+      listHover: mode === 'light' ? '#f1f0ff' : 'rgba(115, 102, 255, 0.2)',
+      svgIcon: mode === 'light' ? 'rgba(58, 53, 65, 0.38)' : 'rgba(231, 227, 252, 0.38)'
     },
     common: {
       black: '#000',

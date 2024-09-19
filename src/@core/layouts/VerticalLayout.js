@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Fab, Box } from '@mui/material'
+import { Fab, Box, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import ArrowUp from 'mdi-material-ui/ArrowUp'
 import themeConfig from 'src/configs/themeConfig'
@@ -18,6 +18,14 @@ const MainContentWrapper = styled(Box)({
   display: 'flex',
   minHeight: '100vh',
   flexDirection: 'column'
+})
+
+const Footer = styled(Box)({
+  backgroundColor: '#fff',
+  boxShadow: '0 0 20px rgba(89, 102, 122, 0.1)',
+  padding: '15px',
+  textAlign: 'center',
+  textTransform: 'capitalize'
 })
 
 const ContentWrapper = styled('main')(({ theme }) => ({
@@ -70,19 +78,12 @@ const VerticalLayout = props => {
         <MainContentWrapper className='layout-content-wrapper'>
           <AppBar toggleNavVisibility={toggleNavVisibility} {...props} />
 
-          <ContentWrapper
-            className='layout-page-content'
-
-            // sx={{
-            //   ...(contentWidth === 'boxed' && {
-            //     mx: 'auto',
-            //     '@media (min-width:1440px)': { maxWidth: 1440 },
-            //     '@media (min-width:1200px)': { maxWidth: '100%' }
-            //   })
-            // }}
-          >
-            {children}
-          </ContentWrapper>
+          <ContentWrapper className='layout-page-content'>{children}</ContentWrapper>
+          <Footer>
+            <Typography variant='subtitle2'>
+              Copyright <strong>2024</strong> © super admin by stackholic
+            </Typography>
+          </Footer>
         </MainContentWrapper>
       </VerticalLayoutWrapper>
 
