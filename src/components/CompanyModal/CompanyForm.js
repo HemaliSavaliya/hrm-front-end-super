@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {
+  Box,
   Button,
   CardActions,
   DialogContentText,
@@ -16,9 +17,18 @@ import {
 import { DropFiles } from 'src/@core/DropFile/DropFiles'
 import CompanyFormLogic from './CompanyFormLogic'
 
-const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addCompany, editCompany }) => {
+const CompanyForm = ({
+  handleClose,
+  editCompanyId,
+  setOpen,
+  companyData,
+  addCompany,
+  editCompany,
+  isViewMode,
+  updateSubscription
+}) => {
   const theme = useTheme()
-  
+
   const {
     formData,
     handleInputChange,
@@ -29,7 +39,7 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
     selectedPlan,
     handlePlanChange,
     handleImageChange
-  } = CompanyFormLogic(companyData, editCompanyId)
+  } = CompanyFormLogic(companyData, editCompanyId, isViewMode)
 
   const descriptionElementRef = useRef(null)
   const [loading, setLoading] = useState(false) // Add loading state
@@ -56,11 +66,15 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
     formData.subscription = selectedPlan
 
     try {
-      if (editCompanyId) {
+      if (isViewMode) {
+        // Call the subscription API with selectedPlan
+        await updateSubscription(formData)
+      } else if (editCompanyId) {
         await editCompany(formData, editCompanyId)
       } else {
         await addCompany(formData)
       }
+
       setFormData(initialFormValue)
       setOpen(false)
     } catch (error) {
@@ -74,52 +88,56 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
     <DialogContentText id='scroll-dialog-description' ref={descriptionElementRef} tabIndex={-1}>
       <form onSubmit={handleFormSubmit} autoComplete='off'>
         <Grid container spacing={5}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label='Company Name'
-              id='companyName'
-              name='companyName'
-              value={formData.companyName}
-              onChange={handleInputChange}
-            />
-            {errors.companyName && (
-              <Typography sx={{ color: '#FF4433', fontSize: '13px', pt: 1 }}>{errors.companyName}</Typography>
-            )}
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label='Company Email'
-              id='companyEmail'
-              name='companyEmail'
-              value={formData.companyEmail}
-              onChange={handleInputChange}
-            />
-            {errors.companyEmail && (
-              <Typography sx={{ color: '#FF4433', fontSize: '13px', pt: 1 }}>{errors.companyEmail}</Typography>
-            )}
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label='Company Pancard Number'
-              id='companyPan'
-              name='companyPan'
-              value={formData.companyPan}
-              onChange={handleInputChange}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label='Company GST Number'
-              id='companyGST'
-              name='companyGST'
-              value={formData.companyGST}
-              onChange={handleInputChange}
-            />
-          </Grid>
+          {!isViewMode && (
+            <>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label='Company Name'
+                  id='companyName'
+                  name='companyName'
+                  value={formData.companyName}
+                  onChange={handleInputChange}
+                />
+                {errors.companyName && (
+                  <Typography sx={{ color: '#FF4433', fontSize: '13px', pt: 1 }}>{errors.companyName}</Typography>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label='Company Email'
+                  id='companyEmail'
+                  name='companyEmail'
+                  value={formData.companyEmail}
+                  onChange={handleInputChange}
+                />
+                {errors.companyEmail && (
+                  <Typography sx={{ color: '#FF4433', fontSize: '13px', pt: 1 }}>{errors.companyEmail}</Typography>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label='Company Pancard Number'
+                  id='companyPan'
+                  name='companyPan'
+                  value={formData.companyPan}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label='Company GST Number'
+                  id='companyGST'
+                  name='companyGST'
+                  value={formData.companyGST}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+            </>
+          )}
           <Grid item xs={12} sm={12}>
             <FormControl>
               <RadioGroup
@@ -138,7 +156,7 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
           </Grid>
           {selectedPlan === 'Custom' && (
             <>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={6} sx={{ mb: 8 }}>
                 <TextField
                   fullWidth
                   type='date'
@@ -155,7 +173,7 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
                   }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={6} sx={{ mb: 8 }}>
                 <TextField
                   fullWidth
                   type='date'
@@ -174,26 +192,28 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
               </Grid>
             </>
           )}
-          <Grid item xs={12} sm={12}>
-            <div
-              id='companyLogo'
-              name='companyLogo'
-              style={{
-                marginBottom: '20px',
-                padding: '20px',
-                border: 'dashed',
-                borderColor: 'currentColor',
-                borderWidth: 'thin',
-                borderRadius: '6px',
-                textAlign: 'center'
-              }}
-            >
-              <DropFiles handleImageChange={handleImageChange} />
-            </div>
-            {errors.companyLogo && (
-              <Typography sx={{ mb: 3, color: '#FF4433', fontSize: '13px' }}>{errors.companyLogo}</Typography>
-            )}
-          </Grid>
+          {!isViewMode && (
+            <Grid item xs={12} sm={12}>
+              <div
+                id='companyLogo'
+                name='companyLogo'
+                style={{
+                  marginBottom: '20px',
+                  padding: '20px',
+                  border: 'dashed',
+                  borderColor: 'currentColor',
+                  borderWidth: 'thin',
+                  borderRadius: '6px',
+                  textAlign: 'center'
+                }}
+              >
+                <DropFiles handleImageChange={handleImageChange} />
+              </div>
+              {errors.companyLogo && (
+                <Typography sx={{ mb: 3, color: '#FF4433', fontSize: '13px' }}>{errors.companyLogo}</Typography>
+              )}
+            </Grid>
+          )}
         </Grid>
         <Divider sx={{ margin: 0 }} />
         <CardActions sx={{ justifyContent: 'flex-end', pb: 0, pr: 0 }}>
@@ -211,7 +231,7 @@ const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addComp
             variant='contained'
             disabled={loading} // Disable button while loading
           >
-            {loading ? <>Saving...</> : !isInEditMode ? 'Save' : 'Update'}
+            {loading ? 'Saving...' : isViewMode ? 'Save Subscription' : !editCompanyId ? 'Save' : 'Update'}
           </Button>
           <Button
             size='large'

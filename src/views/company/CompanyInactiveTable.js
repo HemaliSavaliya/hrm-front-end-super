@@ -8,10 +8,11 @@ import {
   TableContainer,
   TablePagination,
   TableRow,
+  Tooltip,
   Typography,
   useTheme
 } from '@mui/material'
-import { DeleteOffOutline, DeleteOutline, EyeOutline, PencilOutline } from 'mdi-material-ui'
+import { AccountConvertOutline, DeleteOffOutline, PencilOutline } from 'mdi-material-ui'
 import React, { useState } from 'react'
 import { CompanyHeadCells } from 'src/TableHeader/TableHeader'
 import { EnhancedTableHead } from 'src/common/EnhancedTableHead'
@@ -28,7 +29,8 @@ const CompanyInactiveTable = ({
   setPage,
   setRowsPerPage,
   setSortBy,
-  setSortOrder
+  setSortOrder,
+  handleViewSubscription
 }) => {
   // for table
   const [order, setOrder] = useState('asc')
@@ -109,9 +111,6 @@ const CompanyInactiveTable = ({
                     <TableRow tabIndex={-1} key={row.id} sx={{ cursor: 'pointer' }}>
                       <TableCell align='left'>{index + 1 + page * rowsPerPage}</TableCell>
                       <TableCell align='left'>{row.companyName}</TableCell>
-                      {/* <TableCell align='left'>{row.companyEmail}</TableCell> */}
-                      {/* <TableCell align='left'>{row.companyPan || '-'}</TableCell>
-                      <TableCell align='left'>{row.companyGST || '-'}</TableCell> */}
                       <TableCell align='left'>{row.subscription}</TableCell>
                       <TableCell align='left'>{row.startDate || '-'}</TableCell>
                       <TableCell align='left'>{row.endDate || '-'}</TableCell>
@@ -142,35 +141,37 @@ const CompanyInactiveTable = ({
                         </div>
                       </TableCell>
                       <TableCell align='left'>
-                        {/* <Button
-                          sx={{
-                            background: theme.palette.background.paper,
-                            boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
-                            height: '32px',
-                            margin: '0 3px',
-                            minWidth: '32px',
-                            width: '32px'
-                          }}
-                        >
-                          <EyeOutline
-                            // onClick={() => deleteCompany(row.id)}
-                            sx={{ fontSize: '20px', color: '#1c7ad1' }}
-                          />
-                        </Button> */}
-                        <Button
-                          onClick={() => handleEdit(row.id)}
-                          sx={{
-                            background: theme.palette.background.paper,
-                            boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
-                            height: '32px',
-                            margin: '0 3px',
-                            minWidth: '32px',
-                            width: '32px'
-                          }}
-                        >
-                          <PencilOutline sx={{ fontSize: '20px', color: '#7366FF' }} />
-                        </Button>
-                        {row.deleted === 1 ? (
+                        <Tooltip title='Renew Subscription'>
+                          <Button
+                            onClick={() => handleViewSubscription(row.id)}
+                            sx={{
+                              background: theme.palette.background.paper,
+                              boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
+                              height: '32px',
+                              margin: '0 3px',
+                              minWidth: '32px',
+                              width: '32px'
+                            }}
+                          >
+                            <AccountConvertOutline sx={{ fontSize: '20px', color: '#1c7ad1' }} />
+                          </Button>
+                        </Tooltip>
+                        <Tooltip title='Edit Company'>
+                          <Button
+                            onClick={() => handleEdit(row.id)}
+                            sx={{
+                              background: theme.palette.background.paper,
+                              boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
+                              height: '32px',
+                              margin: '0 3px',
+                              minWidth: '32px',
+                              width: '32px'
+                            }}
+                          >
+                            <PencilOutline sx={{ fontSize: '20px', color: '#7366FF' }} />
+                          </Button>
+                        </Tooltip>
+                        <Tooltip title='Enable Company'>
                           <Button
                             onClick={() => deleteCompany(row.id)}
                             sx={{
@@ -184,21 +185,7 @@ const CompanyInactiveTable = ({
                           >
                             <DeleteOffOutline sx={{ fontSize: '20px', color: 'rgb(211, 47, 47)' }} />
                           </Button>
-                        ) : (
-                          <Button
-                            onClick={() => deleteCompany(row.id)}
-                            sx={{
-                              background: theme.palette.background.paper,
-                              boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
-                              height: '32px',
-                              margin: '0 3px',
-                              minWidth: '32px',
-                              width: '32px'
-                            }}
-                          >
-                            <DeleteOutline sx={{ fontSize: '20px', color: 'rgb(211, 47, 47)' }} />
-                          </Button>
-                        )}
+                        </Tooltip>
                       </TableCell>
                     </TableRow>
                   )

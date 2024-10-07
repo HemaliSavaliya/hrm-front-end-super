@@ -8,10 +8,11 @@ import {
   TableContainer,
   TablePagination,
   TableRow,
+  Tooltip,
   Typography,
   useTheme
 } from '@mui/material'
-import { DeleteOffOutline, DeleteOutline, EyeOffOutline, EyeOutline, PencilOutline } from 'mdi-material-ui'
+import { DeleteOffOutline, DeleteOutline, PencilOutline } from 'mdi-material-ui'
 import React, { useState } from 'react'
 import { AdminHeadCells } from 'src/TableHeader/TableHeader'
 import { EnhancedTableHead } from 'src/common/EnhancedTableHead'
@@ -111,62 +112,53 @@ const AdminInactiveTable = ({
                       <TableCell align='left'>{row.email}</TableCell>
                       <TableCell align='left'>{row.companyName}</TableCell>
                       <TableCell align='left'>
-                        {/* <Button
-                          sx={{
-                            background: theme.palette.background.paper,
-                            boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
-                            height: '32px',
-                            margin: '0 3px',
-                            minWidth: '32px',
-                            width: '32px'
-                          }}
-                        >
-                          <EyeOutline
-                            // onClick={() => deleteCompany(row.id)}
-                            sx={{ fontSize: '20px', color: '#1c7ad1' }}
-                          />
-                        </Button> */}
-                        <Button
-                          onClick={() => handleEdit(row.id)}
-                          sx={{
-                            background: theme.palette.background.paper,
-                            boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
-                            height: '32px',
-                            margin: '0 3px',
-                            minWidth: '32px',
-                            width: '32px'
-                          }}
-                        >
-                          <PencilOutline sx={{ fontSize: '20px', color: '#7366FF' }} />
-                        </Button>
+                        <Tooltip title='Edit Admin'>
+                          <Button
+                            onClick={() => handleEdit(row.id)}
+                            sx={{
+                              background: theme.palette.background.paper,
+                              boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
+                              height: '32px',
+                              margin: '0 3px',
+                              minWidth: '32px',
+                              width: '32px'
+                            }}
+                          >
+                            <PencilOutline sx={{ fontSize: '20px', color: '#7366FF' }} />
+                          </Button>
+                        </Tooltip>
                         {row.deleted === 1 ? (
-                          <Button
-                            onClick={() => deleteAdmin(row.id)}
-                            sx={{
-                              background: theme.palette.background.paper,
-                              boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
-                              height: '32px',
-                              margin: '0 3px',
-                              minWidth: '32px',
-                              width: '32px'
-                            }}
-                          >
-                            <DeleteOffOutline sx={{ fontSize: '20px', color: 'rgb(211, 47, 47)' }} />
-                          </Button>
+                          <Tooltip title='Enable Admin'>
+                            <Button
+                              onClick={() => deleteAdmin(row.id)}
+                              sx={{
+                                background: theme.palette.background.paper,
+                                boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
+                                height: '32px',
+                                margin: '0 3px',
+                                minWidth: '32px',
+                                width: '32px'
+                              }}
+                            >
+                              <DeleteOffOutline sx={{ fontSize: '20px', color: 'rgb(211, 47, 47)' }} />
+                            </Button>
+                          </Tooltip>
                         ) : (
-                          <Button
-                            onClick={() => deleteAdmin(row.id)}
-                            sx={{
-                              background: theme.palette.background.paper,
-                              boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
-                              height: '32px',
-                              margin: '0 3px',
-                              minWidth: '32px',
-                              width: '32px'
-                            }}
-                          >
-                            <DeleteOutline sx={{ fontSize: '20px', color: 'rgb(211, 47, 47)' }} />
-                          </Button>
+                          <Tooltip title='Disable Admin'>
+                            <Button
+                              onClick={() => deleteAdmin(row.id)}
+                              sx={{
+                                background: theme.palette.background.paper,
+                                boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
+                                height: '32px',
+                                margin: '0 3px',
+                                minWidth: '32px',
+                                width: '32px'
+                              }}
+                            >
+                              <DeleteOutline sx={{ fontSize: '20px', color: 'rgb(211, 47, 47)' }} />
+                            </Button>
+                          </Tooltip>
                         )}
                       </TableCell>
                     </TableRow>

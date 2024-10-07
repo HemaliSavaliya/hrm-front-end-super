@@ -108,9 +108,9 @@ const AdminModalLogic = (adminData, editAdminId) => {
         }
       })
 
-      const filterData = response.data.filter(admin => !admin.deleted)
+      // const filterData = response.data.filter(admin => !admin.deleted)
 
-      setCompanyData(filterData)
+      setCompanyData(response.data)
     } catch (error) {
       console.error('Error fetching company:', error)
     }

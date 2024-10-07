@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 
-const CompanyFormLogic = (companyData, editCompanyId) => {
+const CompanyFormLogic = (companyData, editCompanyId, isViewMode) => {
   const initialFormValue = {
     companyName: '',
     companyEmail: '',
@@ -21,7 +21,7 @@ const CompanyFormLogic = (companyData, editCompanyId) => {
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-based
     const day = String(date.getDate()).padStart(2, '0')
-    
+
     return `${year}-${month}-${day}`
   }
 
@@ -29,24 +29,36 @@ const CompanyFormLogic = (companyData, editCompanyId) => {
     const plan = event.target.value
     setSelectedPlan(plan)
 
-    const today = new Date()
-    const startDate = getFormattedDate(today)
-    let endDate = ''
+    if (plan === 'Custom') {
+      // Reset startDate and endDate when switching to Custom plan
+      setFormData({
+        ...formData,
+        startDate: '',
+        endDate: ''
+      })
+    } else {
+      // Update startDate and endDate based on the selected plan
+      const today = new Date()
+      const startDate = getFormattedDate(today)
+      let endDate = ''
 
-    if (plan === 'Monthly') {
-      const nextMonth = new Date(today.setMonth(today.getMonth() + 1))
-      endDate = getFormattedDate(nextMonth)
-    } else if (plan === 'Yearly') {
-      const nextYear = new Date(today.setFullYear(today.getFullYear() + 1))
-      endDate = getFormattedDate(nextYear)
+      if (plan === 'Monthly') {
+        const nextMonth = new Date(today)
+        nextMonth.setMonth(nextMonth.getMonth() + 1)
+        endDate = getFormattedDate(nextMonth)
+      } else if (plan === 'Yearly') {
+        const nextYear = new Date(today)
+        nextYear.setFullYear(nextYear.getFullYear() + 1)
+        endDate = getFormattedDate(nextYear)
+      }
+
+      setFormData({
+        ...formData,
+        subscription: plan,
+        startDate: startDate,
+        endDate: endDate
+      })
     }
-
-    setFormData({
-      ...formData,
-      subscription: plan,
-      startDate: plan === 'Custom' ? '' : startDate,
-      endDate: plan === 'Custom' ? '' : endDate
-    })
   }
 
   const validateField = (name, value) => {
@@ -66,8 +78,11 @@ const CompanyFormLogic = (companyData, editCompanyId) => {
         }
         break
       case 'companyLogo':
-        if (value.length === 0) {
-          return 'Company Logo is required'
+        if (!isViewMode && !editCompanyId) {
+          // Check if value is defined before checking its length
+          if (!value || value.length === 0) {
+            return 'Company Logo is required'
+          }
         }
         break
     }

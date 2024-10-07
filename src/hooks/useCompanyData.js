@@ -9,6 +9,7 @@ const useCompanyData = () => {
   const [open, setOpen] = useState(false)
   const [scroll, setScroll] = useState('body')
   const [logoUrls, setLogoUrls] = useState({})
+  const [isViewMode, setIsViewMode] = useState(false)
 
   // Active companies states
   const [companyData, setCompanyData] = useState([])
@@ -38,6 +39,7 @@ const useCompanyData = () => {
   const handleClose = () => {
     setOpen(false)
     setEditCompanyId(null)
+    setIsViewMode(false)
   }
 
   // for dialog box
@@ -48,6 +50,12 @@ const useCompanyData = () => {
 
   const handleEdit = id => {
     setEditCompanyId(id)
+    setOpen(true)
+  }
+
+  const handleViewSubscription = companyId => {
+    setEditCompanyId(companyId)
+    setIsViewMode(true)
     setOpen(true)
   }
 
@@ -290,6 +298,47 @@ const useCompanyData = () => {
     fetchCompanyLogos()
   }, [companyData, companyDataIn])
 
+  const updateSubscription = async subscriptionData => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_URL}/renew-subscription/${subscriptionData.id}`,
+        subscriptionData,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken?.token}`
+          }
+        }
+      )
+
+      // Handle success (e.g., updating state or notifying the user)
+      toast.success('Subscription updated successfully!', {
+        duration: 2000,
+        position: 'top-center',
+        style: {
+          background: theme.palette.background.paper,
+          color: theme.palette.text.primary,
+          fontSize: '15px'
+        }
+      })
+
+      setTimeout(async () => {
+        // Wait for the fetchData to complete before proceeding
+        await fetchActiveData()
+        await fetchInactiveData()
+      }, 1000)
+    } catch (error) {
+      toast.error('Error updating subscription.', {
+        duration: 2000,
+        position: 'top-center',
+        style: {
+          background: theme.palette.background.paper,
+          color: theme.palette.text.primary,
+          fontSize: '15px'
+        }
+      })
+    }
+  }
+
   return {
     editCompanyId,
     addCompany,
@@ -302,6 +351,9 @@ const useCompanyData = () => {
     handleClose,
     handleEdit,
     logoUrls,
+    handleViewSubscription,
+    isViewMode,
+    updateSubscription,
 
     // Active companies
     loading,

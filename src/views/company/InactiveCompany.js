@@ -30,7 +30,10 @@ const InactiveCompany = ({ value }) => {
     setSearchIn,
     setSortByIn,
     setSortOrderIn,
-    fetchInactiveData
+    fetchInactiveData,
+    handleViewSubscription,
+    isViewMode,
+    updateSubscription
   } = useCompanyData()
 
   const handleSearchChange = event => {
@@ -55,6 +58,7 @@ const InactiveCompany = ({ value }) => {
       <Card sx={{ mt: 4, p: 5, boxShadow: '0px 9px 20px rgba(46, 35, 94, 0.07)' }}>
         <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} mb={4}>
           <CompanyModal
+            isViewMode={isViewMode}
             value={value}
             editCompanyId={editCompanyId}
             companyData={companyDataIn}
@@ -65,6 +69,7 @@ const InactiveCompany = ({ value }) => {
             handleClose={handleClose}
             addCompany={addCompany}
             editCompany={editCompany}
+            updateSubscription={updateSubscription}
           />
           <TextField
             label='Search Companys'
@@ -77,6 +82,7 @@ const InactiveCompany = ({ value }) => {
         </Box>
 
         <CompanyInactiveTable
+          handleViewSubscription={handleViewSubscription}
           loadingIn={loadingIn}
           deleteCompany={deleteCompany}
           handleEdit={handleEdit}

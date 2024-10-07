@@ -12,10 +12,12 @@ const CompanyModal = ({
   handleClickOpen,
   handleClose,
   addCompany,
-  editCompany
+  editCompany,
+  isViewMode,
+  updateSubscription
 }) => {
   const theme = useTheme()
-  
+
   return (
     <Box>
       {value === 'active' ? (
@@ -47,7 +49,7 @@ const CompanyModal = ({
       >
         <DialogTitle id='scroll-dialog-title'>
           <Typography variant='h6' fontWeight={600}>
-            {!editCompanyId ? 'Add Company' : 'Update Company'}
+            {isViewMode ? 'View Subscription' : !editCompanyId ? 'Add Company' : 'Update Company'}
           </Typography>
         </DialogTitle>
         <DialogContent dividers={scroll === 'body'} sx={{ borderBottom: '0' }}>
@@ -58,6 +60,8 @@ const CompanyModal = ({
             setOpen={setOpen}
             addCompany={addCompany}
             editCompany={editCompany}
+            isViewMode={isViewMode}
+            updateSubscription={updateSubscription}
           />
         </DialogContent>
       </Dialog>

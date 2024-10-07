@@ -30,7 +30,10 @@ const ActiveCompany = ({ value }) => {
     setSearch,
     setSortBy,
     setSortOrder,
-    fetchActiveData
+    fetchActiveData,
+    handleViewSubscription,
+    isViewMode,
+    updateSubscription
   } = useCompanyData()
 
   const handleSearchChange = event => {
@@ -63,6 +66,7 @@ const ActiveCompany = ({ value }) => {
           mb={4}
         >
           <CompanyModal
+            isViewMode={isViewMode}
             value={value}
             editCompanyId={editCompanyId}
             companyData={companyData}
@@ -73,6 +77,7 @@ const ActiveCompany = ({ value }) => {
             handleClose={handleClose}
             addCompany={addCompany}
             editCompany={editCompany}
+            updateSubscription={updateSubscription}
           />
           <TextField
             sx={{ mt: { xs: 3, sm: 0, lg: 0 } }}
@@ -86,6 +91,7 @@ const ActiveCompany = ({ value }) => {
         </Box>
 
         <CompanyTable
+          handleViewSubscription={handleViewSubscription}
           loading={loading}
           deleteCompany={deleteCompany}
           handleEdit={handleEdit}

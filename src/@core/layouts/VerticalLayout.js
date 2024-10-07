@@ -20,13 +20,13 @@ const MainContentWrapper = styled(Box)({
   flexDirection: 'column'
 })
 
-const Footer = styled(Box)({
-  backgroundColor: '#fff',
+const Footer = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
   boxShadow: '0 0 20px rgba(89, 102, 122, 0.1)',
   padding: '15px',
   textAlign: 'center',
   textTransform: 'capitalize'
-})
+}))
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,

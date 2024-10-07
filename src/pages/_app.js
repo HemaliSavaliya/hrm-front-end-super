@@ -151,57 +151,57 @@ const App = props => {
   // }, []) // Run on mount and when the router changes
 
   // ------ 3rd code ------
-  useEffect(() => {
-    // Handle browser/tab close or page refresh event
-    let isPageRefreshing = false
+  // useEffect(() => {
+  //   // Handle browser/tab close or page refresh event
+  //   let isPageRefreshing = false
 
-    // Listen for the 'beforeunload' event to detect refresh or tab close
-    const handleBeforeUnload = () => {
-      sessionStorage.setItem('isPageRefreshing', 'true') // Store this flag in sessionStorage
-    }
+  //   // Listen for the 'beforeunload' event to detect refresh or tab close
+  //   const handleBeforeUnload = () => {
+  //     sessionStorage.setItem('isPageRefreshing', 'true') // Store this flag in sessionStorage
+  //   }
 
-    // Function to handle token removal only on tab close, not refresh
-    const handleUnload = () => {
-      // const isPageRefreshingFlag = sessionStorage.getItem('isPageRefreshing')
+  //   // Function to handle token removal only on tab close, not refresh
+  //   const handleUnload = () => {
+  //     // const isPageRefreshingFlag = sessionStorage.getItem('isPageRefreshing')
 
-      // Remove token only on tab close, not page refresh
-      if (!isPageRefreshing) {
-        localStorage.removeItem('login-details') // Remove token only on tab close, not refresh
-      }
-    }
+  //     // Remove token only on tab close, not page refresh
+  //     if (!isPageRefreshing) {
+  //       localStorage.removeItem('login-details') // Remove token only on tab close, not refresh
+  //     }
+  //   }
 
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') {
-        // Set the flag when the tab is closing
-        isPageRefreshing = false
-      }
-    }
+  //   const handleVisibilityChange = () => {
+  //     if (document.visibilityState === 'hidden') {
+  //       // Set the flag when the tab is closing
+  //       isPageRefreshing = false
+  //     }
+  //   }
 
-    window.addEventListener('beforeunload', handleBeforeUnload)
-    window.addEventListener('unload', handleUnload)
-    document.addEventListener('visibilitychange', handleVisibilityChange)
+  //   window.addEventListener('beforeunload', handleBeforeUnload)
+  //   window.addEventListener('unload', handleUnload)
+  //   document.addEventListener('visibilitychange', handleVisibilityChange)
 
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload)
-      window.removeEventListener('unload', handleUnload)
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-    }
-  }, [])
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload)
+  //     window.removeEventListener('unload', handleUnload)
+  //     document.removeEventListener('visibilitychange', handleVisibilityChange)
+  //   }
+  // }, [])
 
-  // This handles checking if the page is reloaded and token should be maintained
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const isPageRefreshing = sessionStorage.getItem('isPageRefreshing')
-      const token = localStorage.getItem('login-details')
+  // // This handles checking if the page is reloaded and token should be maintained
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //     const isPageRefreshing = sessionStorage.getItem('isPageRefreshing')
+  //     const token = localStorage.getItem('login-details')
 
-      if (isPageRefreshing !== 'true' && !token) {
-        router.push('/login')
-      }
+  //     if (isPageRefreshing !== 'true' && !token) {
+  //       router.push('/login')
+  //     }
 
-      // Clear the session flag after load
-      sessionStorage.removeItem('isPageRefreshing')
-    }
-  }, [])
+  //     // Clear the session flag after load
+  //     sessionStorage.removeItem('isPageRefreshing')
+  //   }
+  // }, [])
 
   return (
     <>
