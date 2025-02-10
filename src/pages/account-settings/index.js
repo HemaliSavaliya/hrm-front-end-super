@@ -3,11 +3,11 @@ import { Box, Card } from '@mui/material'
 import { TabList, TabPanel, TabContext } from '@mui/lab'
 import { styled } from '@mui/material/styles'
 import MuiTab from '@mui/material/Tab'
-import { LockOpenOutline, LockReset } from 'mdi-material-ui'
 import TabSecurity from 'src/views/account-settings/TabSecurity'
 import TabForgotPassword from 'src/views/account-settings/TabForgotPassword'
 import 'react-datepicker/dist/react-datepicker.css'
 import { motion } from 'framer-motion'
+import { ForgotPasswordIcon, SecurityCheckIcon } from 'hugeicons-react'
 
 const Tab = styled(MuiTab)(({ theme }) => ({
   lineHeight: 1,
@@ -54,7 +54,7 @@ const AccountSettings = () => {
               value='security'
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <LockOpenOutline />
+                  <SecurityCheckIcon size={20} />
                   <TabName>Security</TabName>
                 </Box>
               }
@@ -63,7 +63,7 @@ const AccountSettings = () => {
               value='forgot-password'
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <LockReset />
+                  <ForgotPasswordIcon size={20} />
                   <TabName>Forgot Password</TabName>
                 </Box>
               }

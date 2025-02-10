@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast'
 import useAdminData from 'src/hooks/useAdminData'
 import AdminInactiveTable from './AdminInactiveTable'
 import AdminModal from 'src/components/AdminModal/AdminModal'
+import { inputField, inputLabel } from 'src/Styles'
 
 const InactiveAdmin = ({ value }) => {
   const {
@@ -66,8 +67,9 @@ const InactiveAdmin = ({ value }) => {
             editAdmin={editAdmin}
           />
           <TextField
+            sx={{ ...inputField, ...inputLabel }}
             label='Search Admins'
-            variant='outlined'
+            variant='filled'
             size='small'
             value={searchIn}
             onChange={handleInputChange} // Update the input value as the user types

@@ -5,6 +5,7 @@ import {
   CardActions,
   DialogContentText,
   Divider,
+  FilledInput,
   FormControl,
   Grid,
   IconButton,
@@ -20,6 +21,7 @@ import {
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import AdminModalLogic from './AdminFormLogic'
+import { cancelButton, inputField, inputLabel, saveButton } from 'src/Styles'
 
 const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, editAdmin }) => {
   const {
@@ -89,36 +91,43 @@ const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, edi
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
+              variant="filled"
+              size='small'
               label='Name'
               id='name'
               name='name'
               value={formData.name}
               onChange={handleInputChange}
+              sx={{ ...inputField, ...inputLabel }}
             />
             {errors.name && <Typography sx={{ color: '#FF4433', fontSize: '13px', pt: 1 }}>{errors.name}</Typography>}
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
+              variant="filled"
+              size='small'
               label='Email'
               id='email'
               name='email'
               value={formData.email}
               onChange={handleInputChange}
+              sx={{ ...inputField, ...inputLabel }}
             />
             {errors.email && <Typography sx={{ color: '#FF4433', fontSize: '13px', pt: 1 }}>{errors.email}</Typography>}
           </Grid>
           {!isInEditMode && (
             <Grid item xs={12} sm={12}>
-              <FormControl fullWidth>
-                <InputLabel htmlFor='form-layouts-separator-password'>Password</InputLabel>
-                <OutlinedInput
+              <FormControl fullWidth variant="filled" size='small'>
+                <InputLabel htmlFor='form-layouts-separator-password' sx={inputLabel}>Password</InputLabel>
+                <FilledInput
                   label='Password'
                   id='password'
                   name='password'
                   value={formData.password}
                   onChange={handleInputChange}
                   type={formData.showPassword ? 'text' : 'password'}
+                  sx={inputField}
                   endAdornment={
                     <InputAdornment position='end'>
                       <IconButton
@@ -143,8 +152,8 @@ const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, edi
             </Grid>
           )}
           <Grid item xs={12} sm={12} sx={{ mb: 5 }}>
-            <FormControl fullWidth>
-              <InputLabel>Company Name</InputLabel>
+            <FormControl fullWidth variant="filled" size='small'>
+              <InputLabel sx={inputLabel}>Company Name</InputLabel>
               <Select
                 label='Company Name'
                 value={formData.companyId}
@@ -152,6 +161,7 @@ const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, edi
                 id='companyId'
                 name='companyId'
                 onChange={handleCompanyChange}
+                sx={inputField}
               >
                 {companyData.length === 0 ? (
                   <MenuItem disabled>No Company</MenuItem>
@@ -175,9 +185,7 @@ const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, edi
             size='large'
             type='submit'
             sx={{
-              mr: 2,
-              lineHeight: 0,
-              padding: '20px 25px !important',
+              ...saveButton,
               '&.MuiButton-root:hover': {
                 backgroundColor: theme.palette.primary.hover
               }
@@ -192,7 +200,7 @@ const AdminForm = ({ handleClose, editAdminId, setOpen, adminData, addAdmin, edi
             color='secondary'
             variant='outlined'
             onClick={handleClose}
-            sx={{ lineHeight: 0, padding: '20px 25px !important' }}
+            sx={cancelButton}
             disabled={loading} // Disable button while loading
           >
             Cancel

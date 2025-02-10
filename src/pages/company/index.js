@@ -7,7 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { motion } from 'framer-motion'
 import ActiveCompany from 'src/views/company/ActiveCompany'
 import InactiveCompany from 'src/views/company/InactiveCompany'
-import { BankOffOutline, BankOutline } from 'mdi-material-ui'
+import { NewOfficeIcon, OfficeIcon } from 'hugeicons-react'
 
 const Tab = styled(MuiTab)(({ theme }) => ({
   lineHeight: 1,
@@ -61,7 +61,7 @@ const Company = () => {
               label={
                 <Tooltip title='Active Company'>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <BankOutline />
+                    <OfficeIcon size={20} />
                     <TabName>Active Company</TabName>
                   </Box>
                 </Tooltip>
@@ -72,7 +72,7 @@ const Company = () => {
               label={
                 <Tooltip title='Inactive Company'>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <BankOffOutline />
+                    <NewOfficeIcon size={20} />
                     <TabName>Inactive Company</TabName>
                   </Box>
                 </Tooltip>

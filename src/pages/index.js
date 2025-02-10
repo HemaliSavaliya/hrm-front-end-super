@@ -1,5 +1,5 @@
 import { Card, Grid, styled, Typography } from '@mui/material'
-import { Delete } from 'mdi-material-ui'
+import { Delete01Icon } from 'hugeicons-react'
 import React from 'react'
 import { Toaster } from 'react-hot-toast'
 import useReminder from 'src/hooks/useReminder'
@@ -54,7 +54,7 @@ const Dashboard = () => {
                   </Typography>
                 </Card>
                 <Icon onClick={() => deleteNotification(notification.id)}>
-                  <Delete sx={{ fontSize: '17px' }} />
+                  <Delete01Icon size={17} />
                 </Icon>
               </Grid>
             ))

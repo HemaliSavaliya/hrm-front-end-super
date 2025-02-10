@@ -7,7 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { motion } from 'framer-motion'
 import ActiveAdmin from 'src/views/admin/ActiveAdmin'
 import InactiveAdmin from 'src/views/admin/InactiveAdmin'
-import { AccountLockOpenOutline, AccountLockOutline } from 'mdi-material-ui'
+import { UserBlock01Icon, UserStatusIcon } from 'hugeicons-react'
 
 const Tab = styled(MuiTab)(({ theme }) => ({
   lineHeight: 1,
@@ -61,7 +61,7 @@ const Admin = () => {
               label={
                 <Tooltip title='Active Admin'>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <AccountLockOpenOutline />
+                    <UserStatusIcon size={20} />
                     <TabName>Active Admin</TabName>
                   </Box>
                 </Tooltip>
@@ -72,7 +72,7 @@ const Admin = () => {
               label={
                 <Tooltip title='Inactive Admin'>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <AccountLockOutline />
+                    <UserBlock01Icon size={20} />
                     <TabName>Inactive Admin</TabName>
                   </Box>
                 </Tooltip>

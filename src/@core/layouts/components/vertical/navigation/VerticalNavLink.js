@@ -21,11 +21,15 @@ const MenuNavLink = styled(ListItemButton)(({ theme }) => ({
     fontSize: '15px'
   },
 
+  svg: {
+    width: 20
+  },
+
   '&:hover .MuiTypography-root': {
     color: '#7366FF' // Text and icon color on hover
   },
 
-  '&:hover .MuiSvgIcon-root': {
+  '&:hover svg': {
     color: '#7366FF' // Text and icon color on hover
   },
 
@@ -74,7 +78,7 @@ const MenuNavLink = styled(ListItemButton)(({ theme }) => ({
   },
 
   // Ensure the icon color changes when active
-  '&.active .MuiSvgIcon-root': {
+  '&.active svg': {
     color: '#7366FF' // Icon color when active
   },
 

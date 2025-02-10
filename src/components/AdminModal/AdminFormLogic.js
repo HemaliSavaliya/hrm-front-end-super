@@ -42,8 +42,10 @@ const AdminModalLogic = (adminData, editAdminId) => {
         }
         break
       case 'companyId':
-        if (value === '') {
-          return 'Company Name is required'
+        if (!editAdminId) {
+          if (value === '') {
+            return 'Company Name is required'
+          }
         }
         break
     }

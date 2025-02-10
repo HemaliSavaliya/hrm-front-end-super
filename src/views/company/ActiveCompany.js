@@ -4,6 +4,7 @@ import CompanyModal from 'src/components/CompanyModal/CompanyModal'
 import useCompanyData from 'src/hooks/useCompanyData'
 import CompanyTable from './CompanyTable'
 import { Box, Card, TextField } from '@mui/material'
+import { inputField, inputLabel } from 'src/Styles'
 
 const ActiveCompany = ({ value }) => {
   const {
@@ -79,10 +80,11 @@ const ActiveCompany = ({ value }) => {
             editCompany={editCompany}
             updateSubscription={updateSubscription}
           />
+
           <TextField
-            sx={{ mt: { xs: 3, sm: 0, lg: 0 } }}
-            label='Search Companys'
-            variant='outlined'
+            sx={{ mt: { xs: 3, sm: 0, lg: 0 }, ...inputField, ...inputLabel }}
+            label='Search Company'
+            variant='filled'
             size='small'
             value={search}
             onChange={handleInputChange} // Update the input value as the user types

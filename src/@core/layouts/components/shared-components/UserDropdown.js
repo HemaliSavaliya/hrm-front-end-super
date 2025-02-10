@@ -3,10 +3,9 @@ import { useState, Fragment } from 'react'
 import { useRouter } from 'next/router'
 import { Box, Menu, Badge, MenuItem, Typography, useTheme } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import LogoutVariant from 'mdi-material-ui/LogoutVariant'
 import axios from 'axios'
 import Link from 'next/link'
-import { AccountOutline, ChevronDown } from 'mdi-material-ui'
+import { Logout02Icon, UserEdit01Icon } from 'hugeicons-react'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -34,6 +33,7 @@ const styles = {
   px: 4,
   width: '100%',
   display: 'flex',
+  gap: 2,
   alignItems: 'center',
   color: 'text.primary',
   textDecoration: 'none',
@@ -91,18 +91,18 @@ const UserDropdown = () => {
       </Badge>
       <Box ml={4} sx={{ cursor: 'pointer' }} onClick={handleDropdownOpen}>
         <Typography sx={{ fontWeight: 600, textTransform: 'capitalize' }}>{authToken?.name}</Typography>
-        <Box display={'flex'} justifyContent={'center'} alignItems={'center'}>
+        <Box display={'flex'} justifyContent={'start'} alignItems={'center'}>
           <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
             {authToken?.role}
           </Typography>
-          <ChevronDown
+          {/* <ChevronDown
             fontSize='10px'
             sx={{
               '&.MuiSvgIcon-root': {
                 fill: theme.palette.customColors.svgIcon
               }
             }}
-          />
+          /> */}
         </Box>
       </Box>
       <Menu
@@ -116,14 +116,16 @@ const UserDropdown = () => {
         <Link href={'/account-settings'} style={{ textDecoration: 'none' }}>
           <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
             <Box sx={styles}>
-              <AccountOutline sx={{ marginRight: 2 }} />
+              <UserEdit01Icon size={20} />
               View Profile
             </Box>
           </MenuItem>
         </Link>
-        <MenuItem sx={{ py: 2 }} onClick={handleSignOut}>
-          <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
-          Logout
+        <MenuItem sx={{ p: 0 }} onClick={handleSignOut}>
+          <Box sx={styles}>
+            <Logout02Icon size={20} />
+            Logout
+          </Box>
         </MenuItem>
       </Menu>
     </Fragment>

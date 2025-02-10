@@ -18,6 +18,15 @@ export function EnhancedTableHead(props) {
             align='left'
             padding='normal'
             sortDirection={orderBy === headCell.id ? order : false}
+            sx={
+              headCell.id === 'action'
+                ? {
+                  position: 'sticky',
+                  left: 0,
+                  zIndex: 6
+                }
+                : null
+            }
           >
             <TableSortLabel
               active={orderBy === headCell.id}

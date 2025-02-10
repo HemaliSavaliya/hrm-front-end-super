@@ -1,5 +1,7 @@
 import { Box, Button, Dialog, DialogContent, DialogTitle, Typography, useTheme } from '@mui/material'
 import AdminForm from './AdminForm'
+import { saveButton } from 'src/Styles'
+import { PlusSignIcon } from 'hugeicons-react'
 
 const AdminModal = ({
   value,
@@ -23,14 +25,14 @@ const AdminModal = ({
             variant='contained'
             onClick={handleClickOpen('body')}
             sx={{
-              lineHeight: 0,
-              padding: '20px 25px',
+              ...saveButton,
+              gap: 1,
               '&.MuiButton-root:hover': {
                 backgroundColor: theme.palette.primary.hover
               }
             }}
           >
-            Add Admin
+            Add Admin <PlusSignIcon size={15} />
           </Button>
         </Box>
       ) : (
@@ -44,8 +46,8 @@ const AdminModal = ({
         aria-labelledby='scroll-dialog-title'
         aria-describedby='scroll-dialog-description'
       >
-        <DialogTitle id='scroll-dialog-title'>
-          <Typography variant='h6' fontWeight={600}>
+        <DialogTitle id='scroll-dialog-title' sx={{ padding: "15px 20px !important" }}>
+          <Typography fontSize={15} fontWeight={600}>
             {!editAdminId ? 'Add Admin' : 'Update Admin'}
           </Typography>
         </DialogTitle>

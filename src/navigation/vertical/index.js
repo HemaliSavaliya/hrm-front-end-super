@@ -1,21 +1,21 @@
 // ** Icon imports
-import { AccountTie, HomeAccount, OfficeBuildingOutline } from 'mdi-material-ui'
+import { ComputerDesk03Icon, DashboardSquare02Icon, ManagerIcon } from 'hugeicons-react'
 
 const navigation = () => {
   return [
     {
       title: 'Dashboard',
-      icon: HomeAccount,
+      icon: DashboardSquare02Icon,
       path: '/'
     },
     {
       title: 'Company',
-      icon: OfficeBuildingOutline,
+      icon: ComputerDesk03Icon,
       path: '/company'
     },
     {
       title: 'Admin',
-      icon: AccountTie,
+      icon: ManagerIcon,
       path: '/admin'
     }
   ]

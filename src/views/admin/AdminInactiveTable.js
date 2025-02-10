@@ -107,17 +107,19 @@ const AdminInactiveTable = ({
                 {adminData.map((row, index) => {
                   return (
                     <TableRow tabIndex={-1} key={row.id} sx={{ cursor: 'pointer' }}>
-                      <TableCell align='left'>{index + 1 + page * rowsPerPage}</TableCell>
-                      <TableCell align='left'>{row.name}</TableCell>
-                      <TableCell align='left'>{row.email}</TableCell>
-                      <TableCell align='left'>{row.companyName}</TableCell>
-                      <TableCell align='left'>
+                      <TableCell
+                        align='left'
+                        sx={{
+                          position: 'sticky',
+                          left: 0,
+                          background: theme.palette.background.paper,
+                          zIndex: 1
+                        }}
+                      >
                         <Tooltip title='Edit Admin'>
                           <Button
                             onClick={() => handleEdit(row.id)}
                             sx={{
-                              background: theme.palette.background.paper,
-                              boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
                               height: '32px',
                               margin: '0 3px',
                               minWidth: '32px',
@@ -132,8 +134,6 @@ const AdminInactiveTable = ({
                             <Button
                               onClick={() => deleteAdmin(row.id)}
                               sx={{
-                                background: theme.palette.background.paper,
-                                boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
                                 height: '32px',
                                 margin: '0 3px',
                                 minWidth: '32px',
@@ -148,8 +148,6 @@ const AdminInactiveTable = ({
                             <Button
                               onClick={() => deleteAdmin(row.id)}
                               sx={{
-                                background: theme.palette.background.paper,
-                                boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
                                 height: '32px',
                                 margin: '0 3px',
                                 minWidth: '32px',
@@ -161,6 +159,10 @@ const AdminInactiveTable = ({
                           </Tooltip>
                         )}
                       </TableCell>
+                      <TableCell align='left'>{index + 1 + page * rowsPerPage}</TableCell>
+                      <TableCell align='left'>{row.name}</TableCell>
+                      <TableCell align='left'>{row.email}</TableCell>
+                      <TableCell align='left'>{row.companyName}</TableCell>
                     </TableRow>
                   )
                 })}

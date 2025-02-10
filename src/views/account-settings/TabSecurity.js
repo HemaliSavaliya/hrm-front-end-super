@@ -7,15 +7,16 @@ import {
   IconButton,
   CardContent,
   FormControl,
-  OutlinedInput,
   InputAdornment,
-  useTheme
+  useTheme,
+  FilledInput
 } from '@mui/material'
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import { motion } from 'framer-motion'
 import { Toaster } from 'react-hot-toast'
 import useTabSecurityData from 'src/hooks/useTabSecurityData'
+import { cancelButton, inputField, inputLabel, saveButton } from 'src/Styles'
 
 const TabSecurity = () => {
   const {
@@ -47,14 +48,15 @@ const TabSecurity = () => {
           <Grid item xs={12} sm={6}>
             <Grid container spacing={5}>
               <Grid item xs={12} sx={{ marginTop: 4.75 }}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor='account-settings-current-password'>Current Password</InputLabel>
-                  <OutlinedInput
+                <FormControl fullWidth variant="filled" size='small'>
+                  <InputLabel htmlFor='account-settings-current-password' sx={inputLabel}>Current Password</InputLabel>
+                  <FilledInput
                     label='Current Password'
                     value={values.password}
                     id='account-settings-current-password'
                     type={values.showPassword ? 'text' : 'password'}
                     onChange={handleCurrentPasswordChange('password')}
+                    sx={inputField}
                     endAdornment={
                       <InputAdornment position='end'>
                         <IconButton
@@ -72,14 +74,15 @@ const TabSecurity = () => {
               </Grid>
 
               <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor='account-settings-new-password'>New Password</InputLabel>
-                  <OutlinedInput
+                <FormControl fullWidth variant="filled" size='small'>
+                  <InputLabel htmlFor='account-settings-new-password' sx={inputLabel}>New Password</InputLabel>
+                  <FilledInput
                     label='New Password'
                     value={values.newPassword}
                     id='account-settings-new-password'
                     onChange={handleNewPasswordChange('newPassword')}
                     type={values.showNewPassword ? 'text' : 'password'}
+                    sx={inputField}
                     endAdornment={
                       <InputAdornment position='end'>
                         <IconButton
@@ -97,14 +100,15 @@ const TabSecurity = () => {
               </Grid>
 
               <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor='account-settings-confirm-new-password'>Confirm New Password</InputLabel>
-                  <OutlinedInput
+                <FormControl fullWidth variant="filled" size='small'>
+                  <InputLabel htmlFor='account-settings-confirm-new-password' sx={inputLabel}>Confirm New Password</InputLabel>
+                  <FilledInput
                     label='Confirm New Password'
                     value={values.confirmPassword}
                     id='account-settings-confirm-new-password'
                     type={values.showConfirmPassword ? 'text' : 'password'}
                     onChange={handleConfirmNewPasswordChange('confirmPassword')}
+                    sx={inputField}
                     endAdornment={
                       <InputAdornment position='end'>
                         <IconButton
@@ -141,9 +145,7 @@ const TabSecurity = () => {
           <Button
             variant='contained'
             sx={{
-              marginRight: 3.5,
-              lineHeight: 0,
-              padding: '20px 25px !important',
+              ...saveButton,
               '&.MuiButton-root:hover': {
                 backgroundColor: theme.palette.primary.hover
               }
@@ -156,7 +158,7 @@ const TabSecurity = () => {
             type='reset'
             variant='outlined'
             color='secondary'
-            sx={{ lineHeight: 0, padding: '20px 25px !important' }}
+            sx={cancelButton}
             onClick={() => setValues({ ...values, password: '', newPassword: '', confirmPassword: '' })}
           >
             Reset

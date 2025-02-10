@@ -4,6 +4,7 @@ import CompanyModal from 'src/components/CompanyModal/CompanyModal'
 import useCompanyData from 'src/hooks/useCompanyData'
 import { Box, Card, TextField } from '@mui/material'
 import CompanyInactiveTable from './CompanyInactiveTable'
+import { inputField, inputLabel } from 'src/Styles'
 
 const InactiveCompany = ({ value }) => {
   const {
@@ -72,8 +73,9 @@ const InactiveCompany = ({ value }) => {
             updateSubscription={updateSubscription}
           />
           <TextField
-            label='Search Companys'
-            variant='outlined'
+            sx={{ ...inputField, ...inputLabel }}
+            label='Search Company'
+            variant='filled'
             size='small'
             value={searchIn}
             onChange={handleInputChange} // Update the input value as the user types

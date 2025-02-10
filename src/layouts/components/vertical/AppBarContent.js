@@ -1,5 +1,5 @@
 import { Box, IconButton, useMediaQuery } from '@mui/material'
-import { DragHorizontalVariant } from 'mdi-material-ui'
+import { Menu09Icon } from 'hugeicons-react'
 import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
 import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
 
@@ -26,7 +26,7 @@ const AppBarContent = props => {
             onClick={toggleNavVisibility}
             sx={{ ml: -2.75, ...(hiddenSm ? {} : { mr: 3.5 }) }}
           >
-            <DragHorizontalVariant />
+            <Menu09Icon />
           </IconButton>
         ) : null}
       </Box>

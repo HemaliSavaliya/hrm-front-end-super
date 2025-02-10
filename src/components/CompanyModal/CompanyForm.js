@@ -16,6 +16,7 @@ import {
 } from '@mui/material'
 import { DropFiles } from 'src/@core/DropFile/DropFiles'
 import CompanyFormLogic from './CompanyFormLogic'
+import { cancelButton, inputField, inputLabel, saveButton } from 'src/Styles'
 
 const CompanyForm = ({
   handleClose,
@@ -93,11 +94,14 @@ const CompanyForm = ({
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
+                  variant="filled"
+                  size='small'
                   label='Company Name'
                   id='companyName'
                   name='companyName'
                   value={formData.companyName}
                   onChange={handleInputChange}
+                  sx={{ ...inputField, ...inputLabel }}
                 />
                 {errors.companyName && (
                   <Typography sx={{ color: '#FF4433', fontSize: '13px', pt: 1 }}>{errors.companyName}</Typography>
@@ -106,11 +110,14 @@ const CompanyForm = ({
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
+                  variant="filled"
+                  size='small'
                   label='Company Email'
                   id='companyEmail'
                   name='companyEmail'
                   value={formData.companyEmail}
                   onChange={handleInputChange}
+                  sx={{ ...inputField, ...inputLabel }}
                 />
                 {errors.companyEmail && (
                   <Typography sx={{ color: '#FF4433', fontSize: '13px', pt: 1 }}>{errors.companyEmail}</Typography>
@@ -119,27 +126,33 @@ const CompanyForm = ({
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
+                  variant="filled"
+                  size='small'
                   label='Company Pancard Number'
                   id='companyPan'
                   name='companyPan'
                   value={formData.companyPan}
                   onChange={handleInputChange}
+                  sx={{ ...inputField, ...inputLabel }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
+                  variant="filled"
+                  size='small'
                   label='Company GST Number'
                   id='companyGST'
                   name='companyGST'
                   value={formData.companyGST}
                   onChange={handleInputChange}
+                  sx={{ ...inputField, ...inputLabel }}
                 />
               </Grid>
             </>
           )}
           <Grid item xs={12} sm={12}>
-            <FormControl>
+            <FormControl variant='filled' size="small">
               <RadioGroup
                 row
                 aria-labelledby='demo-row-radio-buttons-group-label'
@@ -148,17 +161,19 @@ const CompanyForm = ({
                 onChange={handlePlanChange}
                 id='subscription'
               >
-                <FormControlLabel value='Monthly' control={<Radio />} label='Monthly' />
-                <FormControlLabel value='Yearly' control={<Radio />} label='Yearly' />
-                <FormControlLabel value='Custom' control={<Radio />} label='Custom' />
+                <FormControlLabel value='Monthly' control={<Radio sx={{ transform: 'scale(0.8)' }} />} label='Monthly' sx={{ '& .MuiTypography-root': { fontSize: 15 } }} />
+                <FormControlLabel value='Yearly' control={<Radio sx={{ transform: 'scale(0.8)' }} />} label='Yearly' sx={{ '& .MuiTypography-root': { fontSize: 15 } }} />
+                <FormControlLabel value='Custom' control={<Radio sx={{ transform: 'scale(0.8)' }} />} label='Custom' sx={{ '& .MuiTypography-root': { fontSize: 15 } }} />
               </RadioGroup>
             </FormControl>
           </Grid>
           {selectedPlan === 'Custom' && (
             <>
-              <Grid item xs={12} sm={6} sx={{ mb: 8 }}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
+                  variant="filled"
+                  size='small'
                   type='date'
                   label='Start Date'
                   id='startDate'
@@ -171,11 +186,14 @@ const CompanyForm = ({
                   inputProps={{
                     placeholder: '' // Set an empty string as the placeholder
                   }}
+                  sx={{ ...inputField, ...inputLabel }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} sx={{ mb: 8 }}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
+                  variant="filled"
+                  size='small'
                   type='date'
                   label='End Date'
                   id='endDate'
@@ -188,6 +206,7 @@ const CompanyForm = ({
                   inputProps={{
                     placeholder: '' // Set an empty string as the placeholder
                   }}
+                  sx={{ ...inputField, ...inputLabel }}
                 />
               </Grid>
             </>
@@ -221,9 +240,7 @@ const CompanyForm = ({
             size='large'
             type='submit'
             sx={{
-              mr: 2,
-              lineHeight: 0,
-              padding: '20px 25px !important',
+              ...saveButton,
               '&.MuiButton-root:hover': {
                 backgroundColor: theme.palette.primary.hover
               }
@@ -238,7 +255,7 @@ const CompanyForm = ({
             color='secondary'
             variant='outlined'
             onClick={handleClose}
-            sx={{ lineHeight: 0, padding: '20px 25px !important' }}
+            sx={cancelButton}
             disabled={loading} // Disable button while loading
           >
             Cancel
