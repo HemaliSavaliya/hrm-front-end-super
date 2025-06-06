@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import CompanyModal from 'src/components/CompanyModal/CompanyModal'
 import useCompanyData from 'src/hooks/useCompanyData'
@@ -37,20 +37,30 @@ const ActiveCompany = ({ value }) => {
     updateSubscription
   } = useCompanyData()
 
-  const handleSearchChange = event => {
-    if (event.key === 'Enter') {
-      fetchActiveData() // Trigger the search when Enter is pressed
-    }
-  }
+  const [debounceTimeout, setDebounceTimeout] = useState(null)
 
   const handleInputChange = event => {
     const value = event.target.value
     setSearch(value)
 
-    if (value === '') {
+    // Clear the previous timeout
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout)
+    }
+
+    // Set a new timeout
+    setDebounceTimeout(
+      setTimeout(() => {
+        fetchActiveData(value) // Call fetchActiveData after a delay
+      }, 300)
+    ) // 300 milliseconds delay
+  }
+
+  useEffect(() => {
+    if (search === '') {
       fetchActiveData() // Fetch original data when search box is cleared
     }
-  }
+  }, [search])
 
   return (
     <>
@@ -88,7 +98,7 @@ const ActiveCompany = ({ value }) => {
             size='small'
             value={search}
             onChange={handleInputChange} // Update the input value as the user types
-            onKeyDown={handleSearchChange} // Trigger the search when Enter is pressed
+            // onKeyDown={handleSearchChange} // Trigger the search when Enter is pressed
           />
         </Box>
 

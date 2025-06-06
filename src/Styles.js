@@ -1,6 +1,7 @@
 export const inputField = {
+    fontSize: 14,
     backgroundColor: 'transparent !important',
-    border: '1px solid #d4d3d5',
+    border: '1px solid rgba(138, 141, 147, 0.5)',
     borderRadius: '5px',
     "&:before": {
         borderBottom: "none !important"

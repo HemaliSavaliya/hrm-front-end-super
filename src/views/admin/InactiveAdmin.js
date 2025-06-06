@@ -1,5 +1,5 @@
 import { Box, Card, TextField } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import useAdminData from 'src/hooks/useAdminData'
 import AdminInactiveTable from './AdminInactiveTable'
@@ -32,21 +32,30 @@ const InactiveAdmin = ({ value }) => {
     setSortOrderIn,
     fetchInactiveData
   } = useAdminData()
-
-  const handleSearchChange = event => {
-    if (event.key === 'Enter') {
-      fetchInactiveData() // Trigger the search when Enter is pressed
-    }
-  }
+  const [debounceTimeout, setDebounceTimeout] = useState(null)
 
   const handleInputChange = event => {
     const value = event.target.value
     setSearchIn(value)
 
-    if (value === '') {
+    // Clear the previous timeout
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout)
+    }
+
+    // Set a new timeout
+    setDebounceTimeout(
+      setTimeout(() => {
+        fetchInactiveData(value) // Call fetchInactiveData after a delay
+      }, 300)
+    ) // 300 milliseconds delay
+  }
+
+  useEffect(() => {
+    if (searchIn === '') {
       fetchInactiveData() // Fetch original data when search box is cleared
     }
-  }
+  }, [searchIn])
 
   return (
     <>
@@ -73,7 +82,7 @@ const InactiveAdmin = ({ value }) => {
             size='small'
             value={searchIn}
             onChange={handleInputChange} // Update the input value as the user types
-            onKeyDown={handleSearchChange} // Trigger the search when Enter is pressed
+            // onKeyDown={handleSearchChange} // Trigger the search when Enter is pressed
           />
         </Box>
 
