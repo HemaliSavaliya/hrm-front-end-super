@@ -1,26 +1,19 @@
+/** @module AppBarContent — Top app-bar content: hamburger (mobile) left · theme + user right. */
 import { Box, IconButton, useMediaQuery } from '@mui/material'
 import { Menu09Icon } from 'hugeicons-react'
 import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
 import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
 
 const AppBarContent = props => {
-  // ** Props
   const { hidden, settings, saveSettings, toggleNavVisibility } = props
-
-  // ** Hook
   const hiddenSm = useMediaQuery(theme => theme.breakpoints.down('sm'))
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}
-    >
+    <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+
+      {/* ── Left: hamburger on mobile only ──────────────────────────────── */}
       <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
-        {hidden ? (
+        {hidden && (
           <IconButton
             color='inherit'
             onClick={toggleNavVisibility}
@@ -28,13 +21,15 @@ const AppBarContent = props => {
           >
             <Menu09Icon />
           </IconButton>
-        ) : null}
+        )}
       </Box>
+
+      {/* ── Right: dark-mode toggle + user dropdown ──────────────────────── */}
       <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
         <ModeToggler settings={settings} saveSettings={saveSettings} />
-        {/* <NotificationDropdown /> */}
         <UserDropdown />
       </Box>
+
     </Box>
   )
 }

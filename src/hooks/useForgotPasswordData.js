@@ -1,139 +1,72 @@
+/** @module useForgotPasswordData — Hook for the admin forgot-password form and user list. */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useTheme } from '@emotion/react'
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import { toastSuccess, toastError } from 'src/utils/toastUtils'
 
+/**
+ * Manages form state for resetting a user's password and fetches the employee list.
+ * @returns {{ values, setValues, userPassword, handleNewPasswordChange,
+ *   handleClickShowNewPassword, handleMouseDownNewPassword, handleConfirmNewPasswordChange,
+ *   handleClickShowConfirmNewPassword, handleMouseDownConfirmNewPassword,
+ *   handleEmployeeName, handleChangePassword }}
+ */
 const useForgotPasswordData = () => {
-  // ** States
-  const [values, setValues] = useState({
-    employeeId: '',
-    newPassword: '',
-    showNewPassword: false,
-    confirmPassword: '',
-    showConfirmPassword: false
-  })
-  const [userPassword, setUserPassword] = useState([])
+  // ── State ──────────────────────────────────────────────────────────────
   const authToken = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('login-details')) : null
   const theme = useTheme()
+  const [values, setValues] = useState({
+    employeeId: '', newPassword: '', showNewPassword: false,
+    confirmPassword: '', showConfirmPassword: false
+  })
+  const [userPassword, setUserPassword] = useState([])
 
-  // Handle New Password
-  const handleNewPasswordChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
+  // ── Handlers ───────────────────────────────────────────────────────────
+  const handleNewPasswordChange = prop => event => setValues({ ...values, [prop]: event.target.value })
+  const handleClickShowNewPassword = () => setValues({ ...values, showNewPassword: !values.showNewPassword })
+  const handleMouseDownNewPassword = event => event.preventDefault()
 
-  const handleClickShowNewPassword = () => {
-    setValues({ ...values, showNewPassword: !values.showNewPassword })
-  }
+  const handleConfirmNewPasswordChange = prop => event => setValues({ ...values, [prop]: event.target.value })
+  const handleClickShowConfirmNewPassword = () => setValues({ ...values, showConfirmPassword: !values.showConfirmPassword })
+  const handleMouseDownConfirmNewPassword = event => event.preventDefault()
 
-  const handleMouseDownNewPassword = event => {
-    event.preventDefault()
-  }
-
-  // Handle Confirm New Password
-  const handleConfirmNewPasswordChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-
-  const handleClickShowConfirmNewPassword = () => {
-    setValues({ ...values, showConfirmPassword: !values.showConfirmPassword })
-  }
-
-  const handleMouseDownConfirmNewPassword = event => {
-    event.preventDefault()
-  }
-
+  /** Resolves the selected user's id from the name and stores it in form state. */
   const handleEmployeeName = prop => event => {
-    // Find the user by name and update employeeId
-    const selectedUser = userPassword.find(user => user.name === event.target.value)
-    if (selectedUser) {
-      setValues({ ...values, [prop]: event.target.value, employeeId: selectedUser.id })
-    }
+    const user = userPassword.find(u => u.name === event.target.value)
+    if (user) setValues({ ...values, [prop]: event.target.value, employeeId: user.id })
   }
 
+  // ── Side Effects ───────────────────────────────────────────────────────
   useEffect(() => {
     const fetchUserList = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/empList`, {
-          headers: {
-            Authorization: `Bearer ${authToken?.token}`
-          }
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_URL}/empList`, {
+          headers: { Authorization: `Bearer ${authToken?.token}` }
         })
-
-        let filteredUsers = response.data.filter(emp => emp.deleted === 0)
-
-        setUserPassword(filteredUsers)
-      } catch (error) {
-        console.error('Error fetching user list', error)
-      }
+        setUserPassword(data.filter(emp => emp.deleted === 0))
+      } catch (error) { console.error('Error fetching user list', error) }
     }
     fetchUserList()
   }, [authToken?.token])
 
   const handleChangePassword = async () => {
     try {
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_URL}/forgot-password`,
-        {
-          id: values.employeeId, // Send the selected user's ID
-          newPassword: values.newPassword,
-          confirmPassword: values.confirmPassword
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken?.token}`
-          }
-        }
+      await axios.post(`${process.env.NEXT_PUBLIC_URL}/forgot-password`,
+        { id: values.employeeId, newPassword: values.newPassword, confirmPassword: values.confirmPassword },
+        { headers: { Authorization: `Bearer ${authToken?.token}` } }
       )
-
-      // Optionally, you can reset the form after successful password update
-      setValues({
-        employeeId: '',
-        newPassword: '',
-        showNewPassword: false,
-        confirmPassword: '',
-        showConfirmPassword: false
-      })
-
-      // Show success message or handle UI updates
-      toast.success('Employee/HR Password Update Successful!', {
-        duration: 2000,
-        position: 'top-center',
-
-        // Styling
-        style: {
-          background: theme.palette.background.paper,
-          color: theme.palette.text.primary,
-          fontSize: '15px'
-        }
-      })
-    } catch (error) {
-      toast.error('Error Updating Employee/HR Password. Please try again.', {
-        duration: 2000,
-        position: 'top-center',
-
-        // Styling
-        style: {
-          background: theme.palette.background.paper,
-          color: theme.palette.text.primary,
-          fontSize: '15px'
-        }
-      })
-    }
+      setValues({ employeeId: '', newPassword: '', showNewPassword: false, confirmPassword: '', showConfirmPassword: false })
+      toast.success('Employee/HR Password Update Successful!', toastSuccess(theme))
+    } catch { toast.error('Error Updating Employee/HR Password. Please try again.', toastError(theme)) }
   }
 
+  // ── Return ─────────────────────────────────────────────────────────────
   return {
-    handleNewPasswordChange,
-    handleClickShowNewPassword,
-    handleMouseDownNewPassword,
-    handleConfirmNewPasswordChange,
-    handleClickShowConfirmNewPassword,
-    handleMouseDownConfirmNewPassword,
-    handleEmployeeName,
-    handleChangePassword,
-    values,
-    setValues,
-    userPassword
+    handleNewPasswordChange, handleClickShowNewPassword, handleMouseDownNewPassword,
+    handleConfirmNewPasswordChange, handleClickShowConfirmNewPassword, handleMouseDownConfirmNewPassword,
+    handleEmployeeName, handleChangePassword, values, setValues, userPassword
   }
 }
 

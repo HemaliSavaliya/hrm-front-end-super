@@ -1,111 +1,38 @@
+/** @module ActiveAdmin — Active admin tab with search, add/edit modal and paginated table. */
 import { Box, Card, TextField } from '@mui/material'
-import React, { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import AdminModal from 'src/components/AdminModal/AdminModal'
-import useAdminData from 'src/hooks/useAdminData'
+import useDebounceSearch from 'src/hooks/useDebounceSearch'
 import AdminTable from './AdminTable'
 import { inputField, inputLabel } from 'src/Styles'
 
-const ActiveAdmin = ({ value }) => {
-  const {
-    deleteAdmin,
-    addAdmin,
-    editAdmin,
-    editAdminId,
-    open,
-    setOpen,
-    scroll,
-    handleClickOpen,
-    handleClose,
-    handleEdit,
-    loading,
-    adminData,
-    totalItems,
-    page,
-    rowsPerPage,
-    search,
-    setPage,
-    setRowsPerPage,
-    setSearch,
-    setSortBy,
-    setSortOrder,
-    fetchActiveData
-  } = useAdminData()
-  const [debounceTimeout, setDebounceTimeout] = useState(null)
+/**
+ * Active admins tab content.
+ * Receives all state and handlers from the parent Admin page via hookData —
+ * no independent hook call, shares one fetch cycle with InactiveAdmin.
+ * @param {{ value: string, hookData: object }} props
+ * @returns {JSX.Element}
+ */
+const ActiveAdmin = ({ value, hookData }) => {
+  const { deleteAdmin, addAdmin, editAdmin, editAdminId, open, setOpen, scroll,
+    handleClickOpen, handleClose, handleEdit, loading, adminData, totalItems,
+    page, rowsPerPage, setPage, setRowsPerPage, setSortBy, setSortOrder, fetchActiveData } = hookData
 
-  const handleInputChange = event => {
-    const value = event.target.value
-    setSearch(value)
-
-    // Clear the previous timeout
-    if (debounceTimeout) {
-      clearTimeout(debounceTimeout)
-    }
-
-    // Set a new timeout
-    setDebounceTimeout(
-      setTimeout(() => {
-        fetchActiveData(value) // Call fetchActiveData after a delay
-      }, 300)
-    ) // 300 milliseconds delay
-  }
-
-  useEffect(() => {
-    if (search === '') {
-      fetchActiveData() // Fetch original data when search box is cleared
-    }
-  }, [search])
+  const { search, handleSearchChange } = useDebounceSearch(hookData.setSearch)
 
   return (
     <>
       <Toaster />
-
-      <Card sx={{ mt: 4, p: 5, boxShadow: '0px 9px 20px rgba(46, 35, 94, 0.07)' }}>
-        <Box
-          sx={{
-            width: '100%',
-            display: { xs: 'grid', sm: 'flex', lg: 'flex' },
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}
-          mb={4}
-        >
-          <AdminModal
-            value={value}
-            editAdminId={editAdminId}
-            adminData={adminData}
-            open={open}
-            setOpen={setOpen}
-            scroll={scroll}
-            handleClickOpen={handleClickOpen}
-            handleClose={handleClose}
-            addAdmin={addAdmin}
-            editAdmin={editAdmin}
-          />
-          <TextField
-            sx={{ mt: { xs: 3, sm: 0, lg: 0 }, ...inputField, ...inputLabel }}
-            label='Search Admins'
-            variant='filled'
-            size='small'
-            value={search}
-            onChange={handleInputChange} // Update the input value as the user types
-            // onKeyDown={handleSearchChange} // Trigger the search when Enter is pressed
-          />
+      <Card sx={{ mt: 4, p: 5, boxShadow: '0px 9px 20px rgba(46,35,94,0.07)' }}>
+        <Box sx={{ width: '100%', display: { xs: 'grid', sm: 'flex' }, alignItems: 'center', justifyContent: 'space-between' }} mb={4}>
+          <AdminModal value={value} editAdminId={editAdminId} adminData={adminData} open={open} setOpen={setOpen}
+            scroll={scroll} handleClickOpen={handleClickOpen} handleClose={handleClose} addAdmin={addAdmin} editAdmin={editAdmin} />
+          <TextField sx={{ mt: { xs: 3, sm: 0 }, ...inputField, ...inputLabel }} label='Search Admins'
+            variant='filled' size='small' value={search} onChange={handleSearchChange} />
         </Box>
-
-        <AdminTable
-          loading={loading}
-          adminData={adminData}
-          totalItems={totalItems}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          setPage={setPage}
-          setRowsPerPage={setRowsPerPage}
-          setSortBy={setSortBy}
-          setSortOrder={setSortOrder}
-          deleteAdmin={deleteAdmin}
-          handleEdit={handleEdit}
-        />
+        <AdminTable loading={loading} adminData={adminData} totalItems={totalItems} page={page} rowsPerPage={rowsPerPage}
+          setPage={setPage} setRowsPerPage={setRowsPerPage} setSortBy={setSortBy} setSortOrder={setSortOrder}
+          deleteAdmin={deleteAdmin} handleEdit={handleEdit} />
       </Card>
     </>
   )

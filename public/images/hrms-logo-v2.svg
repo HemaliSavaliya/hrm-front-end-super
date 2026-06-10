@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 64" width="260" height="64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="wordmark" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <filter id="glow">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#4F46E5" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Badge -->
+  <rect x="1" y="4" width="56" height="56" rx="15" fill="url(#bg)" filter="url(#glow)"/>
+  <!-- Shine overlay -->
+  <rect x="1" y="4" width="56" height="28" rx="15" fill="url(#shine)"/>
+
+  <!-- Org-chart icon: top node -->
+  <circle cx="29" cy="16" r="6" fill="white"/>
+  <!-- Crown spikes on top node -->
+  <polygon points="23,13 26,9 29,13" fill="white" opacity="0.85"/>
+  <polygon points="29,13 32,9 35,13" fill="white" opacity="0.85"/>
+
+  <!-- Connector lines -->
+  <line x1="29" y1="22" x2="29" y2="29" stroke="white" stroke-width="2" stroke-opacity="0.7"/>
+  <line x1="29" y1="29" x2="15" y2="29" stroke="white" stroke-width="2" stroke-opacity="0.7"/>
+  <line x1="29" y1="29" x2="43" y2="29" stroke="white" stroke-width="2" stroke-opacity="0.7"/>
+  <line x1="15" y1="29" x2="15" y2="35" stroke="white" stroke-width="2" stroke-opacity="0.7"/>
+  <line x1="43" y1="29" x2="43" y2="35" stroke="white" stroke-width="2" stroke-opacity="0.7"/>
+
+  <!-- Child nodes -->
+  <circle cx="15" cy="40" r="5" fill="white" opacity="0.9"/>
+  <circle cx="43" cy="40" r="5" fill="white" opacity="0.9"/>
+
+  <!-- Rising bar in bottom-center (growth) -->
+  <rect x="24" y="47" width="4" height="7" rx="1" fill="white" opacity="0.55"/>
+  <rect x="30" y="44" width="4" height="10" rx="1" fill="white" opacity="0.75"/>
+  <rect x="36" y="41" width="4" height="13" rx="1" fill="white" opacity="0.95"/>
+
+  <!-- Wordmark: HRMS -->
+  <text
+    x="68"
+    y="32"
+    font-family="'Segoe UI', 'Inter', Arial, sans-serif"
+    font-weight="800"
+    font-size="26"
+    letter-spacing="-0.5"
+    fill="url(#wordmark)"
+  >HRMS</text>
+
+  <!-- Tagline -->
+  <text
+    x="69"
+    y="50"
+    font-family="'Segoe UI', 'Inter', Arial, sans-serif"
+    font-weight="600"
+    font-size="10"
+    letter-spacing="2.5"
+    fill="#6B7280"
+  >SUPER ADMIN</text>
+
+  <!-- Accent pill under HRMS -->
+  <rect x="68" y="35" width="112" height="2.5" rx="1.25" fill="url(#wordmark)" opacity="0.15"/>
+</svg>

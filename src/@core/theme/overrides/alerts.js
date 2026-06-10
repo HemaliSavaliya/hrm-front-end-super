@@ -1,107 +1,35 @@
 import { lighten, darken } from '@mui/material/styles'
-
-// ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
+
+const makeVariant = (color, getColor) => ({
+  color: getColor(color, 0.12),
+  backgroundColor: hexToRGBA(color, 0.12),
+  '& .MuiAlertTitle-root': { color: getColor(color, 0.12) },
+  '& .MuiAlert-icon': { color: getColor(color, 0.12) }
+})
+
+const makeOutlined = (color, getColor) => ({
+  borderColor: color, color: getColor(color, 0.12),
+  '& .MuiAlertTitle-root': { color: getColor(color, 0.12) },
+  '& .MuiAlert-icon': { color: getColor(color, 0.12) }
+})
 
 const Alert = theme => {
   const getColor = theme.palette.mode === 'light' ? darken : lighten
-
+  const p = theme.palette
   return {
     MuiAlert: {
       styleOverrides: {
-        root: {
-          borderRadius: 5,
-          '& .MuiAlertTitle-root': {
-            marginBottom: theme.spacing(1.6)
-          },
-          '& a': {
-            color: 'inherit',
-            fontWeight: 500
-          }
-        },
-        standardSuccess: {
-          color: getColor(theme.palette.success.main, 0.12),
-          backgroundColor: hexToRGBA(theme.palette.success.main, 0.12),
-          '& .MuiAlertTitle-root': {
-            color: getColor(theme.palette.success.main, 0.12)
-          },
-          '& .MuiAlert-icon': {
-            color: getColor(theme.palette.success.main, 0.12)
-          }
-        },
-        standardInfo: {
-          color: getColor(theme.palette.info.main, 0.12),
-          backgroundColor: hexToRGBA(theme.palette.info.main, 0.12),
-          '& .MuiAlertTitle-root': {
-            color: getColor(theme.palette.info.main, 0.12)
-          },
-          '& .MuiAlert-icon': {
-            color: getColor(theme.palette.info.main, 0.12)
-          }
-        },
-        standardWarning: {
-          color: getColor(theme.palette.warning.main, 0.12),
-          backgroundColor: hexToRGBA(theme.palette.warning.main, 0.12),
-          '& .MuiAlertTitle-root': {
-            color: getColor(theme.palette.warning.main, 0.12)
-          },
-          '& .MuiAlert-icon': {
-            color: getColor(theme.palette.warning.main, 0.12)
-          }
-        },
-        standardError: {
-          color: getColor(theme.palette.error.main, 0.12),
-          backgroundColor: hexToRGBA(theme.palette.error.main, 0.12),
-          '& .MuiAlertTitle-root': {
-            color: getColor(theme.palette.error.main, 0.12)
-          },
-          '& .MuiAlert-icon': {
-            color: getColor(theme.palette.error.main, 0.12)
-          }
-        },
-        outlinedSuccess: {
-          borderColor: theme.palette.success.main,
-          color: getColor(theme.palette.success.main, 0.12),
-          '& .MuiAlertTitle-root': {
-            color: getColor(theme.palette.success.main, 0.12)
-          },
-          '& .MuiAlert-icon': {
-            color: getColor(theme.palette.success.main, 0.12)
-          }
-        },
-        outlinedInfo: {
-          borderColor: theme.palette.info.main,
-          color: getColor(theme.palette.info.main, 0.12),
-          '& .MuiAlertTitle-root': {
-            color: getColor(theme.palette.info.main, 0.12)
-          },
-          '& .MuiAlert-icon': {
-            color: getColor(theme.palette.info.main, 0.12)
-          }
-        },
-        outlinedWarning: {
-          borderColor: theme.palette.warning.main,
-          color: getColor(theme.palette.warning.main, 0.12),
-          '& .MuiAlertTitle-root': {
-            color: getColor(theme.palette.warning.main, 0.12)
-          },
-          '& .MuiAlert-icon': {
-            color: getColor(theme.palette.warning.main, 0.12)
-          }
-        },
-        outlinedError: {
-          borderColor: theme.palette.error.main,
-          color: getColor(theme.palette.error.main, 0.12),
-          '& .MuiAlertTitle-root': {
-            color: getColor(theme.palette.error.main, 0.12)
-          },
-          '& .MuiAlert-icon': {
-            color: getColor(theme.palette.error.main, 0.12)
-          }
-        },
-        filled: {
-          fontWeight: 400
-        }
+        root: { borderRadius: 5, '& .MuiAlertTitle-root': { marginBottom: theme.spacing(1.6) }, '& a': { color: 'inherit', fontWeight: 500 } },
+        standardSuccess: makeVariant(p.success.main, getColor),
+        standardInfo: makeVariant(p.info.main, getColor),
+        standardWarning: makeVariant(p.warning.main, getColor),
+        standardError: makeVariant(p.error.main, getColor),
+        outlinedSuccess: makeOutlined(p.success.main, getColor),
+        outlinedInfo: makeOutlined(p.info.main, getColor),
+        outlinedWarning: makeOutlined(p.warning.main, getColor),
+        outlinedError: makeOutlined(p.error.main, getColor),
+        filled: { fontWeight: 400 }
       }
     }
   }

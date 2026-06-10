@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HRMS Logo Preview</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Inter, Arial, sans-serif;
+      background: #F5F5F9;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .wrapper { width: 100%; max-width: 720px; padding: 32px 20px; }
+    h1 { font-size: 13px; font-weight: 600; color: #9CA3AF; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 28px; }
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 36px 40px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+    .card-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #9CA3AF;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .row { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+    .logo-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .logo-box img { display: block; }
+    .divider {
+      width: 1px; height: 60px;
+      background: #E5E7EB;
+    }
+    .dark-card {
+      background: #1E1B4B;
+      border-radius: 20px;
+      padding: 36px 40px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    }
+    .dark-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .nav-mockup {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      display: flex;
+    }
+    .sidebar {
+      width: 240px;
+      border-right: 1px solid #F3F4F6;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .content-area {
+      flex: 1;
+      padding: 16px 20px;
+      background: #F9FAFB;
+      display: flex;
+      align-items: center;
+    }
+    .content-area span { font-size: 13px; color: #9CA3AF; }
+    .collapse-icon {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: #F3F4F6;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; color: #6B7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>HRMS Logo Preview</h1>
+
+    <!-- Version 2 — new logo -->
+    <div class="card">
+      <div class="card-label">Logo v2 — Current (Navbar)</div>
+      <div class="row">
+        <div class="logo-box">
+          <img src="/images/hrms-logo-v2.svg" alt="HRMS Logo v2" width="220" height="56"/>
+        </div>
+        <div class="divider"></div>
+        <div class="logo-box">
+          <span style="font-size:12px;color:#9CA3AF;margin-right:8px">Collapsed:</span>
+          <img src="/images/hrms-icon.svg" alt="HRMS Icon" width="44" height="44"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Version 1 — previous logo -->
+    <div class="card">
+      <div class="card-label">Logo v1 — Previous</div>
+      <div class="row">
+        <div class="logo-box">
+          <img src="/images/hrms-logo.svg" alt="HRMS Logo v1" width="220" height="56"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navbar mockup -->
+    <div class="card">
+      <div class="card-label">Sidebar Preview (Expanded)</div>
+      <div class="nav-mockup">
+        <div class="sidebar">
+          <img src="/images/hrms-logo-v2.svg" alt="HRMS" width="160" height="42"/>
+          <div class="collapse-icon">«</div>
+        </div>
+        <div class="content-area">
+          <span>← Sidebar | Page content area →</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dark background version -->
+    <div class="dark-card">
+      <div class="dark-label">On dark background</div>
+      <div class="row">
+        <img src="/images/hrms-logo-v2.svg" alt="HRMS Logo v2" width="220" height="56"/>
+        <div class="divider" style="background:rgba(255,255,255,0.1)"></div>
+        <img src="/images/hrms-icon.svg" alt="HRMS Icon" width="44" height="44"/>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

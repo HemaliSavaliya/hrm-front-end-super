@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": "."
+    "baseUrl": ".",
+    "src/*": ["./src/*"]
   },
   "include": [
-    "src"
+    "src", "next.config.js"
   ]
 }

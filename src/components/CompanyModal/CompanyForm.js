@@ -1,87 +1,68 @@
-import React, { useEffect, useRef, useState } from 'react'
-import {
-  Box,
-  Button,
-  CardActions,
-  DialogContentText,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-  useTheme
-} from '@mui/material'
+/** @module CompanyForm — Form body rendered inside CompanyModal for add/edit/view-subscription modes. */
+import { useEffect, useRef, useState } from 'react'
+import { Box, Button, CardActions, DialogContentText, Divider, Grid, Typography, useTheme } from '@mui/material'
 import { DropFiles } from 'src/@core/DropFile/DropFiles'
 import CompanyFormLogic from './CompanyFormLogic'
-import { cancelButton, inputField, inputLabel, saveButton } from 'src/Styles'
+import CompanyInfoFields from './fields/CompanyInfoFields'
+import SubscriptionFields from './fields/SubscriptionFields'
+import { cancelButton, saveButton } from 'src/Styles'
 
-const CompanyForm = ({
-  handleClose,
-  editCompanyId,
-  setOpen,
-  companyData,
-  addCompany,
-  editCompany,
-  isViewMode,
-  updateSubscription
-}) => {
+/**
+ * Renders company fields and handles form submission.
+ * @param {object} props - Includes editCompanyId, isViewMode and CRUD callbacks.
+ * @returns {JSX.Element}
+ */
+const CompanyForm = ({ handleClose, editCompanyId, setOpen, companyData, addCompany, editCompany, isViewMode, updateSubscription }) => {
   const theme = useTheme()
-
-  const {
-    formData,
-    handleInputChange,
-    errors,
-    validateForm,
-    setFormData,
-    initialFormValue,
-    selectedPlan,
-    handlePlanChange,
-    handleImageChange
-  } = CompanyFormLogic(companyData, editCompanyId, isViewMode)
-
+  const { formData, handleInputChange, errors, validateForm, setFormData, initialFormValue, selectedPlan, handlePlanChange, handleImageChange } = CompanyFormLogic(companyData, editCompanyId, isViewMode)
   const descriptionElementRef = useRef(null)
-  const [loading, setLoading] = useState(false) // Add loading state
+  const [loading, setLoading] = useState(false)
 
-  const isInEditMode = !!editCompanyId
+  useEffect(() => { descriptionElementRef.current?.focus() }, [])
 
-  useEffect(() => {
-    const { current: descriptionElement } = descriptionElementRef
-    if (descriptionElement !== null) {
-      descriptionElement.focus()
-    }
-  }, [])
+  /**
+   * Builds a FormData payload for multipart upload (add/edit),
+   * or sends a plain object for the view-subscription (renew) mode.
+   */
+  const buildFormData = () => {
+    const payload = new FormData()
+    const dataToSubmit = { ...formData, subscription: selectedPlan }
 
-  const handleFormSubmit = async e => {
-    e.preventDefault()
+    Object.keys(dataToSubmit).forEach(key => {
+      if (key === 'companyLogo') {
+        // Backend multer expects the file under the field name "companyLogo[]"
+        if (Array.isArray(dataToSubmit.companyLogo) && dataToSubmit.companyLogo.length > 0) {
+          payload.append('companyLogo[]', dataToSubmit.companyLogo[0])
+        }
+      } else {
+        // Append every other field; coerce null/undefined to empty string
+        payload.append(key, dataToSubmit[key] ?? '')
+      }
+    })
 
-    if (!validateForm()) {
-      return // If the form is not valid, don't submit
-    }
+    return payload
+  }
 
-    setLoading(true) // Set loading to true when starting submission
-
-    // Include the radio button value in the formData before submission
-    formData.subscription = selectedPlan
+  const handleFormSubmit = async event => {
+    event.preventDefault()
+    if (!validateForm()) return
+    setLoading(true)
 
     try {
       if (isViewMode) {
-        // Call the subscription API with selectedPlan
-        await updateSubscription(formData)
+        // Subscription renewal: no file upload needed, send plain object
+        await updateSubscription({ ...formData, subscription: selectedPlan })
       } else if (editCompanyId) {
-        await editCompany(formData, editCompanyId)
+        await editCompany(buildFormData(), editCompanyId)
       } else {
-        await addCompany(formData)
+        await addCompany(buildFormData())
       }
-
       setFormData(initialFormValue)
       setOpen(false)
     } catch (error) {
-      console.error('Error submitting the form:', error)
+      console.error('Error submitting company form:', error)
     } finally {
-      setLoading(false) // Set loading to false once submission is done
+      setLoading(false)
     }
   }
 
@@ -89,177 +70,24 @@ const CompanyForm = ({
     <DialogContentText id='scroll-dialog-description' ref={descriptionElementRef} tabIndex={-1}>
       <form onSubmit={handleFormSubmit} autoComplete='off'>
         <Grid container spacing={5}>
+          {!isViewMode && <CompanyInfoFields formData={formData} handleInputChange={handleInputChange} errors={errors} />}
+          <SubscriptionFields selectedPlan={selectedPlan} handlePlanChange={handlePlanChange} formData={formData} handleInputChange={handleInputChange} />
           {!isViewMode && (
-            <>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  variant="filled"
-                  size='small'
-                  label='Company Name'
-                  id='companyName'
-                  name='companyName'
-                  value={formData.companyName}
-                  onChange={handleInputChange}
-                  sx={{ ...inputField, ...inputLabel }}
-                />
-                {errors.companyName && (
-                  <Typography sx={{ color: '#FF4433', fontSize: '13px', pt: 1 }}>{errors.companyName}</Typography>
-                )}
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  variant="filled"
-                  size='small'
-                  label='Company Email'
-                  id='companyEmail'
-                  name='companyEmail'
-                  value={formData.companyEmail}
-                  onChange={handleInputChange}
-                  sx={{ ...inputField, ...inputLabel }}
-                />
-                {errors.companyEmail && (
-                  <Typography sx={{ color: '#FF4433', fontSize: '13px', pt: 1 }}>{errors.companyEmail}</Typography>
-                )}
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  variant="filled"
-                  size='small'
-                  label='Company Pancard Number'
-                  id='companyPan'
-                  name='companyPan'
-                  value={formData.companyPan}
-                  onChange={handleInputChange}
-                  sx={{ ...inputField, ...inputLabel }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  variant="filled"
-                  size='small'
-                  label='Company GST Number'
-                  id='companyGST'
-                  name='companyGST'
-                  value={formData.companyGST}
-                  onChange={handleInputChange}
-                  sx={{ ...inputField, ...inputLabel }}
-                />
-              </Grid>
-            </>
-          )}
-          <Grid item xs={12} sm={12}>
-            <FormControl variant='filled' size="small">
-              <RadioGroup
-                row
-                aria-labelledby='demo-row-radio-buttons-group-label'
-                name='subscription'
-                value={selectedPlan}
-                onChange={handlePlanChange}
-                id='subscription'
-              >
-                <FormControlLabel value='Monthly' control={<Radio sx={{ transform: 'scale(0.8)' }} />} label='Monthly' sx={{ '& .MuiTypography-root': { fontSize: 15 } }} />
-                <FormControlLabel value='Yearly' control={<Radio sx={{ transform: 'scale(0.8)' }} />} label='Yearly' sx={{ '& .MuiTypography-root': { fontSize: 15 } }} />
-                <FormControlLabel value='Custom' control={<Radio sx={{ transform: 'scale(0.8)' }} />} label='Custom' sx={{ '& .MuiTypography-root': { fontSize: 15 } }} />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-          {selectedPlan === 'Custom' && (
-            <>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  variant="filled"
-                  size='small'
-                  type='date'
-                  label='Start Date'
-                  id='startDate'
-                  name='startDate'
-                  value={formData.startDate}
-                  onChange={handleInputChange}
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  inputProps={{
-                    placeholder: '' // Set an empty string as the placeholder
-                  }}
-                  sx={{ ...inputField, ...inputLabel }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  variant="filled"
-                  size='small'
-                  type='date'
-                  label='End Date'
-                  id='endDate'
-                  name='endDate'
-                  value={formData.endDate}
-                  onChange={handleInputChange}
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  inputProps={{
-                    placeholder: '' // Set an empty string as the placeholder
-                  }}
-                  sx={{ ...inputField, ...inputLabel }}
-                />
-              </Grid>
-            </>
-          )}
-          {!isViewMode && (
-            <Grid item xs={12} sm={12}>
-              <div
-                id='companyLogo'
-                name='companyLogo'
-                style={{
-                  marginBottom: '20px',
-                  padding: '20px',
-                  border: 'dashed',
-                  borderColor: 'currentColor',
-                  borderWidth: 'thin',
-                  borderRadius: '6px',
-                  textAlign: 'center'
-                }}
-              >
+            <Grid item xs={12}>
+              <Box sx={{ mb: 2.5, p: 2.5, border: 'dashed', borderColor: 'currentColor', borderWidth: 'thin', borderRadius: '6px', textAlign: 'center' }}>
                 <DropFiles handleImageChange={handleImageChange} />
-              </div>
-              {errors.companyLogo && (
-                <Typography sx={{ mb: 3, color: '#FF4433', fontSize: '13px' }}>{errors.companyLogo}</Typography>
-              )}
+              </Box>
+              {errors.companyLogo && <Typography sx={{ mb: 3, color: '#FF4433', fontSize: '13px' }}>{errors.companyLogo}</Typography>}
             </Grid>
           )}
         </Grid>
         <Divider sx={{ margin: 0 }} />
         <CardActions sx={{ justifyContent: 'flex-end', pb: 0, pr: 0 }}>
-          <Button
-            size='large'
-            type='submit'
-            sx={{
-              ...saveButton,
-              '&.MuiButton-root:hover': {
-                backgroundColor: theme.palette.primary.hover
-              }
-            }}
-            variant='contained'
-            disabled={loading} // Disable button while loading
-          >
+          <Button size='large' type='submit' variant='contained' disabled={loading}
+            sx={{ ...saveButton, '&.MuiButton-root:hover': { backgroundColor: theme.palette.primary.hover } }}>
             {loading ? 'Saving...' : isViewMode ? 'Save Subscription' : !editCompanyId ? 'Save' : 'Update'}
           </Button>
-          <Button
-            size='large'
-            color='secondary'
-            variant='outlined'
-            onClick={handleClose}
-            sx={cancelButton}
-            disabled={loading} // Disable button while loading
-          >
-            Cancel
-          </Button>
+          <Button size='large' color='secondary' variant='outlined' onClick={handleClose} sx={cancelButton} disabled={loading}>Cancel</Button>
         </CardActions>
       </form>
     </DialogContentText>

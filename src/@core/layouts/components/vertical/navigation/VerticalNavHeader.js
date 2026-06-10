@@ -1,22 +1,15 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Box, IconButton, useMediaQuery } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { ArrowLeft01Icon, ArrowLeftDoubleIcon } from 'hugeicons-react'
+import themeConfig from 'src/configs/themeConfig'
 
-// ** Styled Components
-const MenuHeaderWrapper = styled(Box)(({ theme }) => ({
-  padding: '12px 17px',
+const MenuHeaderWrapper = styled(Box)({
+  padding: '14px 16px',
   transition: 'padding .25s ease-in-out',
   boxShadow: '-9px 0 20px rgba(89, 102, 122, 0.1)'
-}))
-
-// const HeaderTitle = styled(Typography)(({ theme }) => ({
-//   fontWeight: 600,
-//   lineHeight: 'normal',
-//   textTransform: 'uppercase',
-//   color: theme.palette.text.primary,
-//   transition: 'opacity .25s ease-in-out, margin .25s ease-in-out'
-// }))
+})
 
 const StyledLink = styled('a')({
   display: 'flex',
@@ -25,28 +18,38 @@ const StyledLink = styled('a')({
 })
 
 const VerticalNavHeader = props => {
-  // ** Props
-  const { verticalNavMenuBranding: userVerticalNavMenuBranding, navWidth } = props
-
-  const isDesktop = useMediaQuery(theme => theme.breakpoints.up('md'))
+  const { verticalNavMenuBranding: userVerticalNavMenuBranding, navWidth, isHovered } = props
+  const isDesktop   = useMediaQuery(theme => theme.breakpoints.up('md'))
+  // Treat as collapsed only when narrow AND not hover-expanded
+  const isCollapsed = navWidth < themeConfig.navigationSize && !isHovered
 
   return (
-    <MenuHeaderWrapper className='nav-header'>
+    <MenuHeaderWrapper className='nav-header' sx={{ px: isCollapsed ? 0 : 2, py: isCollapsed ? 1.5 : '14px' }}>
       {userVerticalNavMenuBranding ? (
         userVerticalNavMenuBranding(props)
-      ) : (
-        <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+      ) : isCollapsed ? (
+        /* ── Collapsed: icon and toggle arrow side by side, centred ── */
+        <Box display='flex' alignItems='center' justifyContent='center' gap={0.5}>
           <Link href='/' passHref>
             <StyledLink>
-              {/* <HeaderTitle variant='h6'>{themeConfig.templateName}</HeaderTitle> */}
-              <img src='/favicon.png' alt='logo' width={35} />
+              <Image src='/images/hrms-icon.svg' alt='HRMS' width={28} height={28} priority />
             </StyledLink>
           </Link>
-          <Box className='actions-left' ml={3.5}>
-            <IconButton color='inherit' onClick={props.toggleNavVisibility}>
-              {isDesktop ? <ArrowLeftDoubleIcon /> : <ArrowLeft01Icon />}
-            </IconButton>
-          </Box>
+          <IconButton color='inherit' onClick={props.toggleNavVisibility} size='small' sx={{ p: 0.3 }}>
+            {isDesktop ? <ArrowLeftDoubleIcon size={14} /> : <ArrowLeft01Icon size={14} />}
+          </IconButton>
+        </Box>
+      ) : (
+        /* ── Expanded: full logo left, toggle right ── */
+        <Box display='flex' justifyContent='space-between' alignItems='center'>
+          <Link href='/' passHref>
+            <StyledLink>
+              <Image src='/images/hrms-logo.svg' alt='HRMS Super Admin' width={170} height={46} priority />
+            </StyledLink>
+          </Link>
+          <IconButton color='inherit' onClick={props.toggleNavVisibility} size='small'>
+            {isDesktop ? <ArrowLeftDoubleIcon size={18} /> : <ArrowLeft01Icon size={18} />}
+          </IconButton>
         </Box>
       )}
     </MenuHeaderWrapper>

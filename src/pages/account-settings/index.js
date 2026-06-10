@@ -1,81 +1,42 @@
+/** @module AccountSettings — Page with tabbed interface for security and forgot-password settings. */
 import { useState } from 'react'
 import { Box, Card } from '@mui/material'
 import { TabList, TabPanel, TabContext } from '@mui/lab'
-import { styled } from '@mui/material/styles'
-import MuiTab from '@mui/material/Tab'
+import { motion } from 'framer-motion'
+import { ForgotPasswordIcon, SecurityCheckIcon } from 'hugeicons-react'
+import { Tab, TabName } from 'src/components/shared/StyledTab'
 import TabSecurity from 'src/views/account-settings/TabSecurity'
 import TabForgotPassword from 'src/views/account-settings/TabForgotPassword'
 import 'react-datepicker/dist/react-datepicker.css'
-import { motion } from 'framer-motion'
-import { ForgotPasswordIcon, SecurityCheckIcon } from 'hugeicons-react'
 
-const Tab = styled(MuiTab)(({ theme }) => ({
-  lineHeight: 1,
-  [theme.breakpoints.down('md')]: {
-    minWidth: 100
-  },
-  [theme.breakpoints.down('sm')]: {
-    minWidth: 67
-  }
-}))
+const TABS = [
+  { value: 'security', icon: <SecurityCheckIcon size={20} />, label: 'Security' },
+  { value: 'forgot-password', icon: <ForgotPasswordIcon size={20} />, label: 'Forgot Password' }
+]
 
-const TabName = styled('span')(({ theme }) => ({
-  // lineHeight: 1.71,
-  fontSize: '0.875rem',
-  marginLeft: theme.spacing(2.4),
-  [theme.breakpoints.down('md')]: {
-    display: 'none'
-  }
-}))
-
+/**
+ * Renders the account-settings card with Security and Forgot Password tabs.
+ * @returns {JSX.Element}
+ */
 const AccountSettings = () => {
-  // ** State
   const [value, setValue] = useState('security')
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue)
-  }
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      exist={{ opacity: 0, y: 15 }}
-      transition={{ delay: 0.25 }}
-    >
+    <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exist={{ opacity: 0, y: 15 }} transition={{ delay: 0.25 }}>
       <Card sx={{ boxShadow: '0px 9px 20px rgba(46, 35, 94, 0.07)' }}>
         <TabContext value={value}>
-          <TabList
-            onChange={handleChange}
-            aria-label='account-settings tabs'
-            sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
-          >
-            <Tab
-              value='security'
-              label={
+          <TabList onChange={(_, v) => setValue(v)} aria-label='account-settings tabs'
+            sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}>
+            {TABS.map(tab => (
+              <Tab key={tab.value} value={tab.value} label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <SecurityCheckIcon size={20} />
-                  <TabName>Security</TabName>
+                  {tab.icon}<TabName>{tab.label}</TabName>
                 </Box>
-              }
-            />
-            <Tab
-              value='forgot-password'
-              label={
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <ForgotPasswordIcon size={20} />
-                  <TabName>Forgot Password</TabName>
-                </Box>
-              }
-            />
+              } />
+            ))}
           </TabList>
-
-          <TabPanel sx={{ p: 0 }} value='security'>
-            <TabSecurity />
-          </TabPanel>
-          <TabPanel sx={{ p: 0 }} value='forgot-password'>
-            <TabForgotPassword />
-          </TabPanel>
+          <TabPanel sx={{ p: 0 }} value='security'><TabSecurity /></TabPanel>
+          <TabPanel sx={{ p: 0 }} value='forgot-password'><TabForgotPassword /></TabPanel>
         </TabContext>
       </Card>
     </motion.div>

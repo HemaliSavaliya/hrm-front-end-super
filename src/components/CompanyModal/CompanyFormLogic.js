@@ -1,154 +1,83 @@
+/** @module CompanyFormLogic — Form state, validation and date helpers for the company form. */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 
-const CompanyFormLogic = (companyData, editCompanyId, isViewMode) => {
-  const initialFormValue = {
-    companyName: '',
-    companyEmail: '',
-    companyPan: '',
-    companyGST: '',
-    subscription: '',
-    startDate: '',
-    endDate: '',
-    companyLogo: []
-  }
+/** Formats a Date object as YYYY-MM-DD for use in date inputs. */
+const getFormattedDate = date => {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
 
+/**
+ * Validates a single form field and returns an error message or empty string.
+ * Email regex covers RFC-5321 local-part characters before the @ symbol.
+ */
+const validateField = (name, value, editCompanyId, isViewMode) => {
+  if (name === 'companyName') {
+    if (!value.trim()) return 'Company Name is required'
+    if (!/^[A-Za-z\s]+$/.test(value)) return 'Company Name should contain only characters'
+  }
+  if (name === 'companyEmail') {
+    if (!value.trim()) return 'Email address is required'
+    if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/.test(value)) return 'Invalid email address'
+  }
+  if (name === 'companyLogo' && !isViewMode && !editCompanyId && (!value || !value.length)) return 'Company Logo is required'
+  return ''
+}
+
+/**
+ * Manages form data, errors, subscription plan selection and pre-fill from existing record.
+ * @param {Array} companyData - List of companies for pre-fill lookup.
+ * @param {string|null} editCompanyId - Id of company being edited, or null for add mode.
+ * @param {boolean} isViewMode - True when only viewing the subscription.
+ * @returns {object} Form state and handlers.
+ */
+const CompanyFormLogic = (companyData, editCompanyId, isViewMode) => {
+  // ── State ──────────────────────────────────────────────────────────────
+  const initialFormValue = { companyName: '', companyEmail: '', companyPan: '', companyGST: '', subscription: '', startDate: '', endDate: '', companyLogo: [] }
   const [formData, setFormData] = useState(initialFormValue)
   const [errors, setErrors] = useState(initialFormValue)
   const [selectedPlan, setSelectedPlan] = useState('')
 
-  const getFormattedDate = date => {
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-based
-    const day = String(date.getDate()).padStart(2, '0')
-
-    return `${year}-${month}-${day}`
-  }
-
+  // ── Handlers ───────────────────────────────────────────────────────────
   const handlePlanChange = event => {
     const plan = event.target.value
     setSelectedPlan(plan)
-
-    if (plan === 'Custom') {
-      // Reset startDate and endDate when switching to Custom plan
-      setFormData({
-        ...formData,
-        startDate: '',
-        endDate: ''
-      })
-    } else {
-      // Update startDate and endDate based on the selected plan
-      const today = new Date()
-      const startDate = getFormattedDate(today)
-      let endDate = ''
-
-      if (plan === 'Monthly') {
-        const nextMonth = new Date(today)
-        nextMonth.setMonth(nextMonth.getMonth() + 1)
-        endDate = getFormattedDate(nextMonth)
-      } else if (plan === 'Yearly') {
-        const nextYear = new Date(today)
-        nextYear.setFullYear(nextYear.getFullYear() + 1)
-        endDate = getFormattedDate(nextYear)
-      }
-
-      setFormData({
-        ...formData,
-        subscription: plan,
-        startDate: startDate,
-        endDate: endDate
-      })
-    }
-  }
-
-  const validateField = (name, value) => {
-    switch (name) {
-      case 'companyName':
-        if (value.trim() === '') {
-          return 'Company Name is required'
-        } else if (!/^[A-Za-z\s]+$/.test(value)) {
-          return 'Company Name should contain only characters'
-        }
-        break
-      case 'companyEmail':
-        if (value.trim() === '') {
-          return 'Email address is required'
-        } else if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/.test(value)) {
-          return 'Invalid email address'
-        }
-        break
-      case 'companyLogo':
-        if (!isViewMode && !editCompanyId) {
-          // Check if value is defined before checking its length
-          if (!value || value.length === 0) {
-            return 'Company Logo is required'
-          }
-        }
-        break
-    }
-
-    return '' // If no error
+    if (plan === 'Custom') { setFormData({ ...formData, startDate: '', endDate: '' }); return }
+    const today = new Date()
+    const startDate = getFormattedDate(today)
+    const next = new Date(today)
+    // Monthly adds 1 month; Yearly adds 1 full year to today
+    plan === 'Monthly' ? next.setMonth(next.getMonth() + 1) : next.setFullYear(next.getFullYear() + 1)
+    setFormData({ ...formData, subscription: plan, startDate, endDate: getFormattedDate(next) })
   }
 
   const validateForm = () => {
     const newErrors = {}
-    Object.keys(initialFormValue).forEach(name => {
-      const value = formData[name]
-      const error = validateField(name, value)
-      newErrors[name] = error
-    })
-
+    Object.keys(initialFormValue).forEach(name => { newErrors[name] = validateField(name, formData[name], editCompanyId, isViewMode) })
     setErrors(newErrors)
-
-    return !Object.values(newErrors).some(error => error !== '')
+    return !Object.values(newErrors).some(Boolean)
   }
 
   const handleInputChange = event => {
     const { name, value } = event.target
-    setFormData({
-      ...formData,
-      [name]: value
-    })
-
-    const error = validateField(name, value)
-
-    setErrors({
-      ...errors,
-      [name]: error
-    })
+    setFormData({ ...formData, [name]: value })
+    setErrors({ ...errors, [name]: validateField(name, value, editCompanyId, isViewMode) })
   }
 
-  const handleImageChange = files => {
-    setFormData({
-      ...formData,
-      companyLogo: files // Store the selected image
-    })
-  }
+  const handleImageChange = files => setFormData({ ...formData, companyLogo: files })
 
+  // ── Side Effects ───────────────────────────────────────────────────────
   useEffect(() => {
-    const selectedCompany = companyData.find(company => company.id === editCompanyId)
-
-    if (selectedCompany) {
-      setFormData(selectedCompany)
-      setSelectedPlan(selectedCompany.subscription || '')
-    } else {
-      setFormData({
-        ...initialFormValue
-      })
-    }
+    const selected = companyData.find(company => company.id === editCompanyId)
+    if (selected) { setFormData(selected); setSelectedPlan(selected.subscription || '') }
+    else setFormData({ ...initialFormValue })
   }, [editCompanyId, companyData])
 
-  return {
-    handleInputChange,
-    formData,
-    errors,
-    validateForm,
-    setFormData,
-    initialFormValue,
-    selectedPlan,
-    handlePlanChange,
-    handleImageChange
-  }
+  // ── Return ─────────────────────────────────────────────────────────────
+  return { handleInputChange, formData, errors, validateForm, setFormData, initialFormValue, selectedPlan, handlePlanChange, handleImageChange }
 }
 
 export default CompanyFormLogic

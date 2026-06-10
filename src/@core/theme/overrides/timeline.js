@@ -1,77 +1,32 @@
-// ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 
+const filledDot = color => ({ boxShadow: `0 0 0 3px ${hexToRGBA(color, 0.12)}` })
+const outlinedDot = color => ({ '& svg': { color } })
+
 const Timeline = theme => {
+  const p = theme.palette
   return {
     MuiTimelineItem: {
-      styleOverrides: {
-        root: {
-          '&:not(:last-of-type)': {
-            '& .MuiTimelineContent-root': {
-              marginBottom: theme.spacing(4)
-            }
-          }
-        }
-      }
+      styleOverrides: { root: { '&:not(:last-of-type)': { '& .MuiTimelineContent-root': { marginBottom: theme.spacing(4) } } } }
     },
-    MuiTimelineConnector: {
-      styleOverrides: {
-        root: {
-          backgroundColor: theme.palette.divider
-        }
-      }
-    },
-    MuiTimelineContent: {
-      styleOverrides: {
-        root: {
-          marginTop: theme.spacing(0.5)
-        }
-      }
-    },
+    MuiTimelineConnector: { styleOverrides: { root: { backgroundColor: theme.palette.divider } } },
+    MuiTimelineContent: { styleOverrides: { root: { marginTop: theme.spacing(0.5) } } },
     MuiTimelineDot: {
       styleOverrides: {
-        filledPrimary: {
-          boxShadow: `0 0 0 3px ${hexToRGBA(theme.palette.primary.main, 0.12)}`
-        },
-        filledSecondary: {
-          boxShadow: `0 0 0 3px ${hexToRGBA(theme.palette.secondary.main, 0.12)}`
-        },
-        filledSuccess: {
-          boxShadow: `0 0 0 3px ${hexToRGBA(theme.palette.success.main, 0.12)}`
-        },
-        filledError: {
-          boxShadow: `0 0 0 3px ${hexToRGBA(theme.palette.error.main, 0.12)}`
-        },
-        filledWarning: {
-          boxShadow: `0 0 0 3px ${hexToRGBA(theme.palette.warning.main, 0.12)}`
-        },
-        filledInfo: {
-          boxShadow: `0 0 0 3px ${hexToRGBA(theme.palette.info.main, 0.12)}`
-        },
-        filledGrey: {
-          boxShadow: `0 0 0 3px ${hexToRGBA(theme.palette.grey[400], 0.12)}`
-        },
-        outlinedPrimary: {
-          '& svg': { color: theme.palette.primary.main }
-        },
-        outlinedSecondary: {
-          '& svg': { color: theme.palette.secondary.main }
-        },
-        outlinedSuccess: {
-          '& svg': { color: theme.palette.success.main }
-        },
-        outlinedError: {
-          '& svg': { color: theme.palette.error.main }
-        },
-        outlinedWarning: {
-          '& svg': { color: theme.palette.warning.main }
-        },
-        outlinedInfo: {
-          '& svg': { color: theme.palette.info.main }
-        },
-        outlinedGrey: {
-          '& svg': { color: theme.palette.grey[500] }
-        }
+        filledPrimary: filledDot(p.primary.main),
+        filledSecondary: filledDot(p.secondary.main),
+        filledSuccess: filledDot(p.success.main),
+        filledError: filledDot(p.error.main),
+        filledWarning: filledDot(p.warning.main),
+        filledInfo: filledDot(p.info.main),
+        filledGrey: filledDot(p.grey[400]),
+        outlinedPrimary: outlinedDot(p.primary.main),
+        outlinedSecondary: outlinedDot(p.secondary.main),
+        outlinedSuccess: outlinedDot(p.success.main),
+        outlinedError: outlinedDot(p.error.main),
+        outlinedWarning: outlinedDot(p.warning.main),
+        outlinedInfo: outlinedDot(p.info.main),
+        outlinedGrey: outlinedDot(p.grey[500])
       }
     }
   }

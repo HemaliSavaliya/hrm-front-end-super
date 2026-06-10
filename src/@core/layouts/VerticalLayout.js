@@ -1,99 +1,55 @@
+/** @module VerticalLayout — Core layout shell with collapsible side navigation and scroll-to-top. */
 import { useState } from 'react'
-import { Fab, Box, Typography } from '@mui/material'
-import { styled } from '@mui/material/styles'
+import { Box, Fab, Typography } from '@mui/material'
 import ArrowUp from 'mdi-material-ui/ArrowUp'
 import themeConfig from 'src/configs/themeConfig'
 import AppBar from './components/vertical/appBar'
 import Navigation from './components/vertical/navigation'
 import ScrollToTop from 'src/@core/components/scroll-to-top'
+import { VerticalLayoutWrapper, MainContentWrapper, Footer, ContentWrapper } from './verticalLayoutStyles'
+import DynamicBreadcrumb from 'src/components/shared/DynamicBreadcrumb'
 
-const VerticalLayoutWrapper = styled('div')({
-  height: '100%',
-  display: 'flex'
-})
-
-const MainContentWrapper = styled(Box)({
-  flexGrow: 1,
-  minWidth: 0,
-  display: 'flex',
-  minHeight: '100vh',
-  flexDirection: 'column'
-})
-
-const Footer = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper,
-  boxShadow: '0 0 20px rgba(89, 102, 122, 0.1)',
-  padding: '15px',
-  textAlign: 'center',
-  textTransform: 'capitalize'
-}))
-
-const ContentWrapper = styled('main')(({ theme }) => ({
-  flexGrow: 1,
-  width: '100%',
-  paddingTop: '5.5rem',
-  paddingLeft: theme.spacing(6),
-  paddingRight: theme.spacing(6),
-  paddingBottom: theme.spacing(6),
-  transition: 'padding .25s ease-in-out',
-  [theme.breakpoints.down('sm')]: {
-    paddingLeft: theme.spacing(4),
-    paddingRight: theme.spacing(4)
-  }
-}))
-
+/**
+ * Wraps page content with a collapsible navigation drawer, app bar and footer.
+ * @param {{ settings, children, scrollToTop }} props
+ * @returns {JSX.Element}
+ */
 const VerticalLayout = props => {
   const { settings, children, scrollToTop } = props
-  const { contentWidth } = settings
+  // ── State ──────────────────────────────────────────────────────────────
   const [navVisible, setNavVisible] = useState(false)
   const [navWidth, setNavWidth] = useState(themeConfig.navigationSize)
   const [isHovered, setIsHovered] = useState(false)
 
+  // ── Handlers ───────────────────────────────────────────────────────────
   const toggleNavVisibility = () => {
     setNavWidth(navVisible ? themeConfig.navigationSize : 70)
     setNavVisible(!navVisible)
   }
 
-  const handleMouseEnter = () => {
-    setIsHovered(true)
-  }
-
-  const handleMouseLeave = () => {
-    setIsHovered(false)
-  }
-
   return (
     <>
       <VerticalLayoutWrapper className='layout-wrapper'>
-        <Navigation
-          navWidth={navWidth}
-          navVisible={navVisible}
-          setNavVisible={setNavVisible}
-          toggleNavVisibility={toggleNavVisibility}
-          isHovered={isHovered}
-          handleMouseEnter={handleMouseEnter}
-          handleMouseLeave={handleMouseLeave}
-          {...props}
-        />
+        <Navigation navWidth={navWidth} navVisible={navVisible} setNavVisible={setNavVisible}
+          toggleNavVisibility={toggleNavVisibility} isHovered={isHovered}
+          handleMouseEnter={() => setIsHovered(true)} handleMouseLeave={() => setIsHovered(false)} {...props} />
         <MainContentWrapper className='layout-content-wrapper'>
           <AppBar toggleNavVisibility={toggleNavVisibility} {...props} />
-
-          <ContentWrapper className='layout-page-content'>{children}</ContentWrapper>
+          <ContentWrapper className='layout-page-content'>
+            {/* ── Breadcrumb (top-right) ─────────────────────────────────── */}
+            <Box display='flex' justifyContent='flex-end' mb={2}>
+              <DynamicBreadcrumb />
+            </Box>
+            {children}
+          </ContentWrapper>
           <Footer>
-            <Typography variant='subtitle2'>
-              Copyright <strong>2024</strong> © super admin by stackholic
-            </Typography>
+            <Typography variant='subtitle2'>Copyright <strong>2024</strong> © super admin by stackholic</Typography>
           </Footer>
         </MainContentWrapper>
       </VerticalLayoutWrapper>
-
-      {scrollToTop ? (
-        scrollToTop(props)
-      ) : (
+      {scrollToTop ? scrollToTop(props) : (
         <ScrollToTop className='mui-fixed'>
-          <Fab color='primary' size='small' aria-label='scroll back to top'>
-            <ArrowUp />
-          </Fab>
+          <Fab color='primary' size='small' aria-label='scroll back to top'><ArrowUp /></Fab>
         </ScrollToTop>
       )}
     </>
